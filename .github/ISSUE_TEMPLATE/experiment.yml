@@ -1,0 +1,22 @@
+name: Propose an experiment
+description: A small concurrency bug with a precise model
+title: '[Experiment]: '
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The bug and invariant
+      description: What must remain true? What concrete schedule breaks it?
+    validations:
+      required: true
+  - type: textarea
+    id: model
+    attributes:
+      label: Initial state and worker operations
+      description: Specify atomic steps, assumptions, and a proposed fix.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Primary technical reference

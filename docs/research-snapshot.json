@@ -1,0 +1,94 @@
+{
+  "retrieved": "2026-09-08",
+  "source": "GitHub REST API, authenticated read",
+  "sample": "Purposeful reference sample, not a census or ranking of all developers",
+  "repositories": [
+    {
+      "description": "😎 Awesome lists about all kinds of interesting topics [NOTE: Pull requests are temporarily disabled until I have a chance to catch up with the existing ones]",
+      "forks_count": 36791,
+      "full_name": "sindresorhus/awesome",
+      "html_url": "https://github.com/sindresorhus/awesome",
+      "stargazers_count": 504200
+    },
+    {
+      "description": "💡 Use the right package manager",
+      "forks_count": 276,
+      "full_name": "antfu-collective/ni",
+      "html_url": "https://github.com/antfu-collective/ni",
+      "stargazers_count": 8299
+    },
+    {
+      "description": "Terminal JSON viewer & processor",
+      "forks_count": 487,
+      "full_name": "antonmedv/fx",
+      "html_url": "https://github.com/antonmedv/fx",
+      "stargazers_count": 20620
+    },
+    {
+      "description": "50+ mini web projects using HTML, CSS & JS",
+      "forks_count": 9725,
+      "full_name": "bradtraversy/50projects50days",
+      "html_url": "https://github.com/bradtraversy/50projects50days",
+      "stargazers_count": 40635
+    },
+    {
+      "description": "📝 Algorithms and data structures implemented in JavaScript with explanations and links to further readings",
+      "forks_count": 31033,
+      "full_name": "trekhleb/javascript-algorithms",
+      "html_url": "https://github.com/trekhleb/javascript-algorithms",
+      "stargazers_count": 196658
+    },
+    {
+      "description": "All Algorithms implemented in Python",
+      "forks_count": 51023,
+      "full_name": "TheAlgorithms/Python",
+      "html_url": "https://github.com/TheAlgorithms/Python",
+      "stargazers_count": 224372
+    },
+    {
+      "description": "Interactive roadmaps, guides and other educational content to help developers grow in their careers.",
+      "forks_count": 44905,
+      "full_name": "nilbuild/developer-roadmap",
+      "html_url": "https://github.com/nilbuild/developer-roadmap",
+      "stargazers_count": 366595
+    },
+    {
+      "description": "Master programming by recreating your favorite technologies from scratch.",
+      "forks_count": 51397,
+      "full_name": "codecrafters-io/build-your-own-x",
+      "html_url": "https://github.com/codecrafters-io/build-your-own-x",
+      "stargazers_count": 546004
+    },
+    {
+      "description": "A tiny scalar-valued autograd engine and a neural net library on top of it with PyTorch-like API",
+      "forks_count": 2782,
+      "full_name": "karpathy/micrograd",
+      "html_url": "https://github.com/karpathy/micrograd",
+      "stargazers_count": 17436
+    },
+    {
+      "description": "A browser based code editor",
+      "forks_count": 4122,
+      "full_name": "microsoft/monaco-editor",
+      "html_url": "https://github.com/microsoft/monaco-editor",
+      "stargazers_count": 46695
+    },
+    {
+      "description": "Virtual whiteboard for sketching hand-drawn like diagrams",
+      "forks_count": 15170,
+      "full_name": "excalidraw/excalidraw",
+      "html_url": "https://github.com/excalidraw/excalidraw",
+      "stargazers_count": 131421
+    },
+    {
+      "full_name": "deadlockempire/deadlockempire.github.io",
+      "stargazers_count": 1057,
+      "html_url": "https://github.com/deadlockempire/deadlockempire.github.io"
+    },
+    {
+      "full_name": "ncase/trust",
+      "stargazers_count": 6280,
+      "html_url": "https://github.com/ncase/trust"
+    }
+  ]
+}

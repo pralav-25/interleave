@@ -1,0 +1,21 @@
+name: Report a bug
+description: A simulation, replay, or interface behaves incorrectly
+title: '[Bug]: '
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Replay link or steps to reproduce
+      description: Paste a Share replay URL when possible.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and device
