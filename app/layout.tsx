@@ -6,12 +6,12 @@ const mono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Interleave — Concurrency, made visible',
   description:
-    'You are the scheduler. Reproduce race conditions, rewind execution, and explore every possible schedule. Six interactive experiments. No signup.',
+    'Reproduce race conditions, test fixes, ask a local AI tutor, and save private investigations. Six interactive concurrency experiments with shareable replays.',
   authors: [{ name: 'Pralav Singh', url: 'https://github.com/pralav-25' }],
   openGraph: {
     title: 'Interleave — Concurrency, made visible',
     description:
-      'Two increments. One disappears. Make the bug happen, then test the fix.',
+      'Make the bug happen, ask AI why, and save the investigation. An open-source concurrency workbench.',
     type: 'website',
   },
 };

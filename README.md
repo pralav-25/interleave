@@ -6,7 +6,7 @@
 
 ### Concurrency, made visible.
 
-**You are the scheduler. Break the code. Rewind. Test the fix.**
+**Break the code. Test the fix. Ask AI why. Save the investigation.**
 
 [**Open the live lab →**](https://interleave-pralav.websites4u.chatgpt.site) · [Try a failing execution](https://interleave-pralav.websites4u.chatgpt.site/#v=1&lab=lost-update&mode=buggy&trace=ABABAB) · [Contribute an experiment](CONTRIBUTING.md)
 
@@ -20,7 +20,7 @@ Two workers increment a counter. The final value is **1**.
 
 Interleave lets you see exactly how that happens. Advance one worker at a time, inspect shared and local state, and rewind to branch into a different execution. Then switch to the fix and explore every terminal schedule in the model.
 
-No signup. No API key. No arbitrary code execution. The simulation runs in your browser.
+The public lab runs in your browser with no signup. An optional **local AI tutor** explains the exact trace without an API key. Sign in with ChatGPT to keep **private saved investigations**, notes, and replay links across sessions.
 
 ## Your first bug in 10 seconds
 
@@ -54,6 +54,15 @@ No signup. No API key. No arbitrary code execution. The simulation runs in your 
 
 Each experiment includes the broken implementation, its fix, an invariant, model assumptions, and a reference to primary documentation.
 
+## A workbench you can come back to
+
+- **Trace-aware AI.** Ask for an explanation, a hint, or the limits of a fix. A real Qwen 2.5 model runs through WebLLM in a dedicated browser worker. Its context is rebuilt from the deterministic engine; verified facts and generated explanations are displayed separately.
+- **Private workspace.** Save an execution with a title and notes, reopen the exact schedule, and edit or delete it later. Investigations are stored in Cloudflare D1 and scoped to the signed-in account.
+- **Safe concurrent edits.** Revision checks reject stale edits or deletes instead of silently overwriting a newer version. An atomic quota check limits each account to 50 investigations.
+- **Public sharing, deliberately.** Share a replay URL or export Markdown. Replay URLs contain the experiment and schedule, not your private title or notes.
+
+AI starts only when you select **Ask assistant → Enable local AI**. First use downloads roughly **1 GB** of model assets and needs WebGPU with about **2 GB of available GPU memory**. Download size and memory needs vary with runtime overhead and caching. Questions and answers stay on your device; model downloads contact external asset hosts. Chat history is temporary. The lab and workspace work without AI. [AI details and validation limits →](docs/AI.md)
+
 ## How it works
 
 - **Deterministic engine.** Each displayed operation is atomic; workers retain their own program order. You choose the interleaving.
@@ -86,19 +95,22 @@ Requires Node.js **22.13+** and pnpm **11.19.0**.
 git clone https://github.com/pralav-25/interleave.git
 cd interleave
 pnpm install --frozen-lockfile
+pnpm db:migrate:local
 pnpm dev
 ```
 
 Open the local URL printed by the dev server.
 
 ```bash
-pnpm test       # Engine, model, replay, and session regression tests
+pnpm test       # Engine, replay, AI lifecycle, and SQLite workspace tests
 pnpm typecheck  # Strict TypeScript
 pnpm lint       # Oxlint
 pnpm build      # Production build
 ```
 
-Built with TypeScript, React, Vinext/Vite, and the provided Shadcn primitives. The web application deploys to Cloudflare Workers through Sites; the simulation itself runs on the client. The development server prints a local test identity from the hosting integration; the lab does not require login. The `.openai/hosting.json` project ID identifies this live demo and is not a credential; use your own project registration for deployment.
+Built with TypeScript, React, Vinext/Vite, WebLLM, Cloudflare Workers, D1, and Shadcn primitives. The development server provides a local test identity through the hosting integration's sign-in flow. The `.openai/hosting.json` project ID identifies this live demo and is not a credential; register your own Sites project when deploying a fork.
+
+The architecture separates browser simulation and AI from authenticated edge storage. Database queries use an owner index, bounded payloads, and version checks. This is a working product foundation; it has not been load-tested and makes no throughput or unlimited-scale claim. Team workspaces, billing, hosted AI, production code analysis, and custom model authoring are not implemented. [Architecture, API, deployment, and scaling boundaries →](docs/ARCHITECTURE.md)
 
 ## Contribute
 

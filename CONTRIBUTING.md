@@ -4,7 +4,9 @@ Welcome. Small, accurate experiments are the heart of this project.
 
 ## Development
 
-Use Node 22.13+ and pnpm 11.19.0. Run `pnpm install --frozen-lockfile`, then `pnpm dev`. Before opening a pull request, run `pnpm check` and `pnpm build`.
+Use Node 22.13+ and pnpm 11.19.0. Run `pnpm install --frozen-lockfile`, `pnpm db:migrate:local`, then `pnpm dev`. Before opening a pull request, run `pnpm check` and `pnpm build`. See [architecture and deployment](docs/ARCHITECTURE.md) for the workspace and [AI assistance](docs/AI.md) for the model integration.
+
+Keep identity at the trusted hosting boundary and every database operation scoped to its authenticated owner. Generate schema changes with `pnpm db:generate`; commit migrations and never rewrite an applied migration. Cover authorization and optimistic concurrency changes with real SQLite tests. For AI lifecycle changes, distinguish mock-provider tests from actual WebGPU validation; report the browser, GPU, model, and result if you run the latter.
 
 ## Add an experiment
 
