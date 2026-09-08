@@ -255,3 +255,15 @@ void test('return paths reject external origins, control characters and login lo
     assert.equal(safeReturnPath(value), '/workspace');
   assert.equal(safeReturnPath('/#v=1'), '/#v=1');
 });
+void test('protocol-relative request paths cannot forward credentials to another origin', async () => {
+  let called = false;
+  const handle = createGateway(config, async () => {
+    called = true;
+    return new Response('Unexpected network request');
+  });
+  const result = await handle(
+    new Request('https://app.test//attacker.test/steal'),
+  );
+  assert.equal(result.status, 503);
+  assert.equal(called, false);
+});

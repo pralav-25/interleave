@@ -91,7 +91,10 @@ export function createGateway(
   if (config.secret.length < 32)
     throw new Error('Gateway secret is not configured.');
   async function upstream(path: string, init: RequestInit = {}) {
-    return fetcher(new URL(path, backend), {
+    const destination = new URL(path, backend);
+    if (destination.origin !== backend)
+      throw new Error('Cross-origin backend request rejected.');
+    return fetcher(destination, {
       ...init,
       redirect: 'manual',
       signal: AbortSignal.timeout(20000),
