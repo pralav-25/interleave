@@ -128,7 +128,7 @@ export function Workspace({ email }: { email: string }) {
       <header className="app-header">
         <Link href="/" className="brand">
           <Workflow size={28} />
-          interleave <small>v0.2</small>
+          interleave <small>Workspace</small>
         </Link>
         <nav className="header-links">
           <Link href="/">Lab</Link>
@@ -142,7 +142,7 @@ export function Workspace({ email }: { email: string }) {
         <div className="workspace-intro">
           <div>
             <p className="eyebrow">Your workspace</p>
-            <h1>Keep the investigation going.</h1>
+            <h1>Your investigations.</h1>
             <p>Saved traces and notes, private to your account.</p>
             <p className="account-email">{email}</p>
           </div>

@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${sans.variable} ${mono.variable}`}>
         <a className="skip-link" href="#main">
-          Skip to experiment
+          Skip to main content
         </a>
         {children}
       </body>

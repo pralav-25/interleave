@@ -11,6 +11,8 @@ flowchart LR
   Browser -->|Explicit model enable| Assets[External model assets]
 ```
 
+The public entry point can now run on Vercel. Its CDN serves static assets, and a Node.js gateway forwards page and API requests to the existing Sites backend. Authentication uses a one-time PKCE code exchange and revocable host-only sessions. The database and authenticated server-rendered application remain on Sites/Cloudflare; this is not a migration of D1 to Vercel. See [Vercel deployment](VERCEL.md) for the exact boundary and configuration.
+
 ## Boundaries
 
 - `lib/engine.ts`, `lib/experiments.ts`, and replay/session modules implement deterministic teaching models independently of React.

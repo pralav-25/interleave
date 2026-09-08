@@ -7,7 +7,12 @@ export const metadata = {
   title: 'Your workspace · Interleave',
   robots: { index: false, follow: false },
 };
-export default async function WorkspacePage() {
+export default async function WorkspacePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ signin?: string }>;
+}) {
+  const { signin } = await searchParams;
   const user = await getChatGPTUser();
   if (user) return <Workspace email={user.email} />;
   return (
@@ -20,6 +25,11 @@ export default async function WorkspacePage() {
         <Link href="/">Back to the lab</Link>
       </header>
       <main id="main" className="workspace-signin">
+        {signin === 'expired' && (
+          <p className="product-error" role="alert">
+            That sign-in link expired. Sign in again to open your workspace.
+          </p>
+        )}
         <Bookmark size={35} />
         <p className="eyebrow">Your private workspace</p>
         <h1>

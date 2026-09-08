@@ -8,7 +8,7 @@
 
 **Break the code. Test the fix. Ask AI why. Save the investigation.**
 
-[**Open the live lab →**](https://interleave-pralav.websites4u.chatgpt.site) · [Try a failing execution](https://interleave-pralav.websites4u.chatgpt.site/#v=1&lab=lost-update&mode=buggy&trace=ABABAB) · [Contribute an experiment](CONTRIBUTING.md)
+[**Open the live lab →**](https://interleave-pralav.websites4u.chatgpt.site) · [Try a failing execution](https://interleave-pralav.websites4u.chatgpt.site/#v=1&lab=lost-update&mode=buggy&trace=ABABAB) · [Contribute an experiment](CONTRIBUTING.md) · [Deploy on Vercel](docs/VERCEL.md)
 
 [![CI](https://github.com/pralav-25/interleave/actions/workflows/ci.yml/badge.svg)](https://github.com/pralav-25/interleave/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-d3f36a)](LICENSE)
@@ -55,6 +55,8 @@ The public lab runs in your browser with no signup. An optional **local AI tutor
 Each experiment includes the broken implementation, its fix, an invariant, model assumptions, and a reference to primary documentation.
 
 ## A workbench you can come back to
+
+A compact toolbar separates execution from save, share, and AI tools. Live execution status, keyboard hints, a quick guide, readable code, and layouts for small screens make the first investigation easier to follow.
 
 - **Trace-aware AI.** Ask for an explanation, a hint, or the limits of a fix. A real Qwen 2.5 model runs through WebLLM in a dedicated browser worker. Its context is rebuilt from the deterministic engine; verified facts and generated explanations are displayed separately.
 - **Private workspace.** Save an execution with a title and notes, reopen the exact schedule, and edit or delete it later. Investigations are stored in Cloudflare D1 and scoped to the signed-in account.
@@ -110,7 +112,7 @@ pnpm build      # Production build
 
 Built with TypeScript, React, Vinext/Vite, WebLLM, Cloudflare Workers, D1, and Shadcn primitives. The development server provides a local test identity through the hosting integration's sign-in flow. The `.openai/hosting.json` project ID identifies this live demo and is not a credential; register your own Sites project when deploying a fork.
 
-The architecture separates browser simulation and AI from authenticated edge storage. Database queries use an owner index, bounded payloads, and version checks. This is a working product foundation; it has not been load-tested and makes no throughput or unlimited-scale claim. Team workspaces, billing, hosted AI, production code analysis, and custom model authoring are not implemented. [Architecture, API, deployment, and scaling boundaries →](docs/ARCHITECTURE.md)
+The Vercel deployment serves browser assets from its CDN and uses a small server gateway for page rendering, workspace requests, and sign-in. The existing Sites/Cloudflare backend retains identity verification and D1 storage, so existing investigations keep their owners. The architecture separates browser simulation and AI from authenticated edge storage. Database queries use an owner index, bounded payloads, and version checks. This is a working product foundation; it has not been load-tested and makes no throughput or unlimited-scale claim. Team workspaces, billing, hosted AI, production code analysis, and custom model authoring are not implemented. [Architecture, API, deployment, and scaling boundaries →](docs/ARCHITECTURE.md)
 
 ## Contribute
 

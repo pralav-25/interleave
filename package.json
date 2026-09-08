@@ -1,6 +1,6 @@
 {
   "name": "interleave",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "engines": {
     "node": ">=22.13.0"
@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "check": "pnpm test && pnpm typecheck && pnpm lint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate:local": "wrangler d1 migrations apply DB --local --config wrangler.local.json"
+    "db:migrate:local": "wrangler d1 migrations apply DB --local --config wrangler.local.json",
+    "build:vercel": "pnpm build && node deploy/vercel/build.mjs"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

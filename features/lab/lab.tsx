@@ -13,6 +13,7 @@ const AssistantPanel = lazy(() =>
     default: m.AssistantPanel,
   })),
 );
+import { QuickGuide } from './quick-guide';
 import { SaveDialog } from '@/features/workspace/save-dialog';
 import {
   Workflow,
@@ -35,6 +36,7 @@ import {
   GitBranch,
   Check,
   LockKeyhole,
+  BookOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -72,6 +74,7 @@ export default function Lab() {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [assistantMounted, setAssistantMounted] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
   const [notice, setNotice] = useState('');
   const [fallbackUrl, setFallbackUrl] = useState('');
   const experiment = experiments.find((e) => e.id === session.id)!;
@@ -241,16 +244,20 @@ export default function Lab() {
       <header className="app-header">
         <Link href="/" className="brand" aria-label="Interleave home">
           <Workflow size={28} strokeWidth={1.8} />
-          interleave <small>v0.2</small>
+          interleave <small>Concurrency lab</small>
         </Link>
         <div className="header-links">
           <Link href="/workspace" className="workspace-nav-link">
             <Bookmark size={15} />
             Workspace
           </Link>
-          <a className="header-docs" href={`${REPO}#how-it-works`}>
-            How it works
-          </a>
+          <Button
+            variant="ghost"
+            className="guide-button"
+            onClick={() => setGuideOpen(true)}
+          >
+            <BookOpen size={16} /> Quick guide
+          </Button>
           <a
             className="github-link"
             href={REPO}
@@ -258,7 +265,7 @@ export default function Lab() {
             rel="noreferrer"
           >
             <Star size={17} />
-            Star on GitHub <ArrowUpRight size={14} />
+            GitHub <ArrowUpRight size={14} />
           </a>
         </div>
       </header>
@@ -269,7 +276,7 @@ export default function Lab() {
           aria-label="Experiments"
         >
           <p className="eyebrow nav-label">
-            The experiments <span>06</span>
+            Experiments <span>06</span>
           </p>
           <SidebarContent className="scenario-list">
             {experiments.map((e, i) => (
@@ -304,12 +311,15 @@ export default function Lab() {
             <div>
               <div className="eyebrow lab-tag">
                 <span className="status-dot" />
-                Concurrency, made visible
+                Concurrency lab <span className="breadcrumb-divider">
+                  /
+                </span>{' '}
+                {experiment.category}
               </div>
-              <h1>{experiment.headline}</h1>
+              <h1>{experiment.title}</h1>
               <p>{experiment.description}</p>
             </div>
-            <span className="pill mono">{experiment.category}</span>
+            <span className="pill">Interactive experiment</span>
           </section>
           <div className="lab-controls">
             <Tabs
@@ -327,6 +337,37 @@ export default function Lab() {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
+            <Button onClick={demonstrate} className="run-button">
+              <Play size={14} />
+              {session.mode === 'buggy'
+                ? 'Find a failure'
+                : 'Run a passing path'}
+            </Button>
+          </div>
+          <div className="lab-utilities">
+            <output
+              className={`execution-status ${failure ? 'is-failing' : status === 'pass' ? 'is-passing' : ''}`}
+            >
+              {failure ? (
+                <CircleAlert size={15} />
+              ) : status === 'pass' ? (
+                <ShieldCheck size={15} />
+              ) : (
+                <CircleDot size={15} />
+              )}
+              <span>
+                {status === 'deadlock'
+                  ? 'Deadlock'
+                  : status === 'fail'
+                    ? 'Invariant broken'
+                    : status === 'pass'
+                      ? 'Invariant holds'
+                      : session.cursor === 0
+                        ? 'Ready to explore'
+                        : 'Execution in progress'}
+              </span>
+              <span className="execution-step mono">Step {session.cursor}</span>
+            </output>
             <div className="control-buttons">
               <Button
                 variant="outline"
@@ -364,12 +405,6 @@ export default function Lab() {
                 <Share2 size={15} />
                 Share replay
               </Button>
-              <Button onClick={demonstrate}>
-                <Play size={14} />
-                {session.mode === 'buggy'
-                  ? 'Find a failure'
-                  : 'Run a passing path'}
-              </Button>
             </div>
           </div>
           <div className="lab-grid">
@@ -377,9 +412,11 @@ export default function Lab() {
               <div className="panel-heading">
                 <strong className="text-link">
                   <Workflow size={16} />
-                  You are the scheduler
+                  Execution
                 </strong>
-                <span className="mono">1 = A · 2 = B</span>
+                <span className="shortcut-hint">
+                  Step workers with <kbd>1</kbd> and <kbd>2</kbd>
+                </span>
               </div>
               <div className="threads">
                 {([0, 1] as Actor[]).map((a) => {
@@ -654,6 +691,10 @@ export default function Lab() {
                   <button
                     key={result.schedule.join('')}
                     className={`schedule-dot ${result.outcome !== 'pass' ? 'fail' : ''}`}
+                    aria-pressed={
+                      result.schedule.join('') ===
+                      session.trace.slice(0, session.cursor).join('')
+                    }
                     title={`Schedule ${i + 1}: ${result.schedule.map((a) => (a === 0 ? 'A' : 'B')).join('')} — ${result.outcome}`}
                     aria-label={`Schedule ${i + 1}, ${result.outcome}: ${result.schedule.map((a) => (a === 0 ? 'A' : 'B')).join(', ')}`}
                     onClick={() => {
@@ -728,6 +769,7 @@ export default function Lab() {
           />
         </Suspense>
       )}
+      <QuickGuide open={guideOpen} onOpenChange={setGuideOpen} />
       {saveOpen && (
         <SaveDialog
           open={saveOpen}

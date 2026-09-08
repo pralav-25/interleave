@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "pnpm build:vercel",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "regions": ["bom1"]
+}
