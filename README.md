@@ -8,7 +8,7 @@
 
 **Break the code. Test the fix. Ask AI why. Save the investigation.**
 
-[**Open the live lab →**](https://interleave-pralav.websites4u.chatgpt.site) · [Try a failing execution](https://interleave-pralav.websites4u.chatgpt.site/#v=1&lab=lost-update&mode=buggy&trace=ABABAB) · [Contribute an experiment](CONTRIBUTING.md) · [Deploy on Vercel](docs/VERCEL.md)
+[**Open the live lab →**](https://interleave-pralav.vercel.app) · [Try a failing execution](https://interleave-pralav.vercel.app/#v=1&lab=lost-update&mode=buggy&trace=ABABAB) · [Contribute an experiment](CONTRIBUTING.md) · [Deploy on Vercel](docs/VERCEL.md)
 
 [![CI](https://github.com/pralav-25/interleave/actions/workflows/ci.yml/badge.svg)](https://github.com/pralav-25/interleave/actions/workflows/ci.yml)
 [![MIT License](https://img.shields.io/badge/license-MIT-d3f36a)](LICENSE)
@@ -24,7 +24,7 @@ The public lab runs in your browser with no signup. An optional **local AI tutor
 
 ## Your first bug in 10 seconds
 
-1. Open [Lost update](https://interleave-pralav.websites4u.chatgpt.site).
+1. Open [Lost update](https://interleave-pralav.vercel.app).
 2. Click **Find a failure**, or press **1, 2, 1, 2, 1, 2** to schedule the workers yourself.
 3. Both workers finish, but the counter is **1** instead of **2**.
 4. Select **With the fix**. The atomic increment passes every modeled schedule.
