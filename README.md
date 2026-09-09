@@ -114,6 +114,16 @@ Built with TypeScript, React, Vinext/Vite, WebLLM, Cloudflare Workers, D1, and S
 
 The Vercel deployment serves browser assets from its CDN and uses a small server gateway for page rendering, workspace requests, and sign-in. The existing Sites/Cloudflare backend retains identity verification and D1 storage, so existing investigations keep their owners. The architecture separates browser simulation and AI from authenticated edge storage. Database queries use an owner index, bounded payloads, and version checks. This is a working product foundation; it has not been load-tested and makes no throughput or unlimited-scale claim. Team workspaces, billing, hosted AI, production code analysis, and custom model authoring are not implemented. [Architecture, API, deployment, and scaling boundaries →](docs/ARCHITECTURE.md)
 
+## Report a reproducible problem
+
+1. Select the experiment and the **With the bug** or **With the fix** mode, then advance to the unexpected state.
+2. Use **Share replay** and reopen the link to confirm it reproduces the same execution.
+3. Use **Export this trace** to save the operations, final state, and model assumptions.
+4. Include the replay, expected result, actual result, and browser version in a [bug report](.github/ISSUE_TEMPLATE/bug.yml).
+
+A replay contains the experiment, mode, and schedule. It does not include private
+investigation notes or AI chat, so describe those separately if they are relevant.
+
 ## Contribute
 
 The most useful contribution is a **small, explainable bug** with a failing schedule and a fix that passes every modeled schedule. Start with [CONTRIBUTING.md](CONTRIBUTING.md). Contributions that improve accuracy, accessibility, or explanations are welcome.
