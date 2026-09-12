@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { ArrowRight, GitBranch, Workflow, Bot, Bookmark } from 'lucide-react';
 import {
   Dialog,
@@ -14,12 +15,15 @@ export function QuickGuide({
   open: boolean;
   onOpenChange: (value: boolean) => void;
 }) {
+  const titleRef = useRef<HTMLHeadingElement>(null);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="quick-guide">
+      <DialogContent className="quick-guide" initialFocus={titleRef}>
         <DialogHeader>
           <span className="eyebrow">Your first investigation</span>
-          <DialogTitle>Make the bug visible.</DialogTitle>
+          <DialogTitle ref={titleRef} tabIndex={-1}>
+            Make the bug visible.
+          </DialogTitle>
           <DialogDescription>
             Control the order of two workers. See exactly when their shared
             state goes wrong.
@@ -35,7 +39,8 @@ export function QuickGuide({
               <p>
                 Click Step A or Step B, or use keys 1 and 2. Each highlighted
                 row is one indivisible operation. Find a failure plays a known
-                failing schedule.
+                failing schedule. On a phone, both worker controls stay at the
+                bottom of the screen.
               </p>
             </div>
           </li>
@@ -48,7 +53,8 @@ export function QuickGuide({
               <p>
                 Watch shared state and the invariant. Select a timeline step to
                 rewind, then choose a different worker. Switch to With the fix
-                to compare.
+                to compare. Filter the schedule list to inspect just the passes
+                or failures, then replay any result.
               </p>
             </div>
           </li>

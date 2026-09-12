@@ -77,6 +77,7 @@ export default function Lab() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [notice, setNotice] = useState('');
   const [fallbackUrl, setFallbackUrl] = useState('');
+  const [scheduleFilter, setScheduleFilter] = useState('all');
   const experiment = experiments.find((e) => e.id === session.id)!;
   const program = useMemo(
     () => experiment.make(session.mode),
@@ -87,6 +88,13 @@ export default function Lab() {
     [program, session.trace, session.cursor],
   );
   const exploration = useMemo(() => explore(program), [program]);
+  const previousFrame = useMemo(
+    () =>
+      session.cursor > 0
+        ? replay(program, session.trace.slice(0, session.cursor - 1)).frame
+        : null,
+    [program, session.trace, session.cursor],
+  );
   const assistantContext = useMemo(
     () => ({
       id: session.id,
@@ -99,12 +107,22 @@ export default function Lab() {
   const status = outcome(program, run.frame);
   const failures = exploration.results.filter((r) => r.outcome !== 'pass');
   const passes = exploration.results.length - failures.length;
+  const visibleSchedules = exploration.results
+    .map((result, index) => ({ result, index }))
+    .filter(
+      ({ result }) =>
+        scheduleFilter === 'all' ||
+        (scheduleFilter === 'pass'
+          ? result.outcome === 'pass'
+          : result.outcome !== 'pass'),
+    );
   const lastEvent = run.events.at(-1);
   useEffect(() => {
     function restore() {
       try {
         const saved = decodeReplay(window.location.hash, experiments);
         if (saved) {
+          setScheduleFilter('all');
           dispatch({
             type: 'load',
             session: {
@@ -169,6 +187,7 @@ export default function Lab() {
     dispatch({ type: 'step', actor });
   }
   function select(id: string) {
+    setScheduleFilter('all');
     clearFeedback();
     dispatch({ type: 'select', id });
     window.history.replaceState(
@@ -178,6 +197,7 @@ export default function Lab() {
     );
   }
   function changeMode(mode: Mode) {
+    setScheduleFilter('all');
     clearFeedback();
     dispatch({ type: 'mode', mode });
     window.history.replaceState(
@@ -251,13 +271,6 @@ export default function Lab() {
             <Bookmark size={15} />
             Workspace
           </Link>
-          <Button
-            variant="ghost"
-            className="guide-button"
-            onClick={() => setGuideOpen(true)}
-          >
-            <BookOpen size={16} /> Quick guide
-          </Button>
           <a
             className="github-link"
             href={REPO}
@@ -276,7 +289,8 @@ export default function Lab() {
           aria-label="Experiments"
         >
           <p className="eyebrow nav-label">
-            Experiments <span>06</span>
+            Experiments{' '}
+            <span>{String(experiments.length).padStart(2, '0')}</span>
           </p>
           <SidebarContent className="scenario-list">
             {experiments.map((e, i) => (
@@ -295,6 +309,13 @@ export default function Lab() {
             ))}
           </SidebarContent>
           <div className="nav-bottom">
+            <Button
+              variant="ghost"
+              className="nav-help"
+              onClick={() => setGuideOpen(true)}
+            >
+              <BookOpen size={16} /> Quick guide
+            </Button>
             <a className="text-link" href={`${REPO}/blob/main/CONTRIBUTING.md`}>
               <FlaskConical size={16} />
               Add an experiment <ArrowUpRight size={13} />
@@ -310,33 +331,42 @@ export default function Lab() {
           <section className="intro">
             <div>
               <div className="eyebrow lab-tag">
-                <span className="status-dot" />
-                Concurrency lab <span className="breadcrumb-divider">
-                  /
-                </span>{' '}
+                Experiment{' '}
+                {String(experiments.indexOf(experiment) + 1).padStart(2, '0')}{' '}
+                <span className="breadcrumb-divider">/</span>{' '}
                 {experiment.category}
               </div>
               <h1>{experiment.title}</h1>
               <p>{experiment.description}</p>
             </div>
-            <span className="pill">Interactive experiment</span>
+            <Button
+              variant="ghost"
+              className="guide-button"
+              aria-label="Open quick guide"
+              onClick={() => setGuideOpen(true)}
+            >
+              <BookOpen size={17} /> <span>How to use</span>
+            </Button>
           </section>
           <div className="lab-controls">
-            <Tabs
-              value={session.mode}
-              onValueChange={(v) => changeMode(v as Mode)}
-            >
-              <TabsList className="mode-tabs" aria-label="Implementation">
-                <TabsTrigger value="buggy">
-                  <GitBranch size={15} />
-                  With the bug
-                </TabsTrigger>
-                <TabsTrigger value="fixed">
-                  <ShieldCheck size={15} />
-                  With the fix
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
+            <div className="implementation-control">
+              <span className="control-label">Implementation</span>
+              <Tabs
+                value={session.mode}
+                onValueChange={(v) => changeMode(v as Mode)}
+              >
+                <TabsList className="mode-tabs" aria-label="Implementation">
+                  <TabsTrigger value="buggy">
+                    <GitBranch size={15} />
+                    With the bug
+                  </TabsTrigger>
+                  <TabsTrigger value="fixed">
+                    <ShieldCheck size={15} />
+                    With the fix
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
             <Button onClick={demonstrate} className="run-button">
               <Play size={14} />
               {session.mode === 'buggy'
@@ -401,7 +431,11 @@ export default function Lab() {
               >
                 <RotateCcw size={16} />
               </Button>
-              <Button variant="outline" onClick={share}>
+              <Button
+                className="share-button"
+                variant="outline"
+                onClick={share}
+              >
                 <Share2 size={15} />
                 Share replay
               </Button>
@@ -473,13 +507,17 @@ export default function Lab() {
                               ? 'Waiting for lock'
                               : `Step ${a === 0 ? 'A' : 'B'}`}
                         </Button>
+                        <kbd aria-label={`Keyboard shortcut ${a + 1}`}>
+                          {a + 1}
+                        </kbd>
                       </div>
                       <div className="locals mono">
+                        <span className="local-label">LOCAL STATE</span>
                         {Object.keys(run.frame.locals[a]).length
                           ? Object.entries(run.frame.locals[a])
                               .map(([key, value]) => `${key}: ${format(value)}`)
                               .join(' · ')
-                          : 'local: —'}
+                          : 'No values yet'}
                       </div>
                     </section>
                   );
@@ -496,6 +534,7 @@ export default function Lab() {
                   <button
                     className="trace-start"
                     aria-label="Rewind to initial state"
+                    aria-pressed={session.cursor === 0}
                     onClick={() => {
                       setPlaying(false);
                       dispatch({ type: 'seek', cursor: 0 });
@@ -525,46 +564,55 @@ export default function Lab() {
                     </span>
                   )}
                 </div>
-                {session.trace.length > 0 && (
-                  <div className="playback">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      disabled={session.cursor === 0}
-                      aria-label="Previous step"
-                      onClick={() => {
-                        setPlaying(false);
-                        dispatch({ type: 'seek', cursor: session.cursor - 1 });
-                      }}
-                    >
-                      <ChevronLeft size={16} />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      disabled={
-                        session.cursor === session.trace.length && !playing
-                      }
-                      aria-label={playing ? 'Pause replay' : 'Play replay'}
-                      onClick={() => setPlaying(!playing)}
-                    >
-                      {playing ? <Pause size={15} /> : <Play size={15} />}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      disabled={session.cursor === session.trace.length}
-                      aria-label="Next step"
-                      onClick={() => {
-                        setPlaying(false);
-                        dispatch({ type: 'seek', cursor: session.cursor + 1 });
-                      }}
-                    >
-                      <ChevronRight size={16} />
-                    </Button>
-                    <span>Rewind, then step a worker to branch.</span>
-                  </div>
-                )}
+                <div className="playback">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    disabled={session.cursor === 0}
+                    aria-label="Previous step"
+                    onClick={() => {
+                      setPlaying(false);
+                      dispatch({ type: 'seek', cursor: session.cursor - 1 });
+                    }}
+                  >
+                    <ChevronLeft size={16} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="replay-button"
+                    disabled={session.trace.length === 0}
+                    aria-label={playing ? 'Pause replay' : 'Play replay'}
+                    onClick={() => {
+                      if (!playing && session.cursor === session.trace.length)
+                        dispatch({ type: 'seek', cursor: 0 });
+                      setPlaying(!playing);
+                    }}
+                  >
+                    {playing ? <Pause size={15} /> : <Play size={15} />}
+                    {playing
+                      ? 'Pause'
+                      : session.cursor === session.trace.length
+                        ? 'Replay'
+                        : 'Continue'}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    disabled={session.cursor === session.trace.length}
+                    aria-label="Next step"
+                    onClick={() => {
+                      setPlaying(false);
+                      dispatch({ type: 'seek', cursor: session.cursor + 1 });
+                    }}
+                  >
+                    <ChevronRight size={16} />
+                  </Button>
+                  <span>
+                    {session.cursor < session.trace.length
+                      ? `Stepping a worker replaces the remaining ${session.trace.length - session.cursor} steps.`
+                      : 'Select a step to rewind and try another order.'}
+                  </span>
+                </div>
               </div>
             </section>
             <aside className="inspector" aria-label="Execution state">
@@ -575,9 +623,27 @@ export default function Lab() {
                 </div>
                 <dl className="state-values">
                   {Object.entries(run.frame.shared).map(([key, value]) => (
-                    <div className="state-item" key={key}>
+                    <div
+                      className="state-item"
+                      key={key}
+                      data-changed={
+                        previousFrame !== null &&
+                        previousFrame.shared[key] !== value
+                      }
+                    >
                       <dt className="mono">{key}</dt>
-                      <dd className="mono">{format(value)}</dd>
+                      <dd className="mono">
+                        {previousFrame &&
+                          previousFrame.shared[key] !== value && (
+                            <span
+                              className="previous-value"
+                              aria-label={`Previously ${format(previousFrame.shared[key])}`}
+                            >
+                              {format(previousFrame.shared[key])}
+                            </span>
+                          )}
+                        {format(value)}
+                      </dd>
                     </div>
                   ))}
                   {Object.entries(run.frame.locks).map(([key, value]) => (
@@ -591,7 +657,7 @@ export default function Lab() {
                 </dl>
               </section>
               <section
-                className={`invariant ${failure ? 'bad' : ''}`}
+                className={`invariant ${failure ? 'bad' : status === 'pass' ? 'good' : ''}`}
                 aria-live="polite"
                 aria-atomic="true"
               >
@@ -609,7 +675,7 @@ export default function Lab() {
                       ? 'Invariant broken'
                       : status === 'pass'
                         ? 'Invariant holds'
-                        : 'The invariant'}
+                        : 'What should hold'}
                 </div>
                 <p className="mono">{program.expected}</p>
                 <small>
@@ -621,6 +687,14 @@ export default function Lab() {
                         ? 'Unfinished workers. No enabled operation.'
                         : 'This schedule is a counterexample.'}
                 </small>
+                {failure && session.mode === 'buggy' && (
+                  <button
+                    className="compare-fix"
+                    onClick={() => changeMode('fixed')}
+                  >
+                    Compare the fix <ArrowRight size={15} />
+                  </button>
+                )}
               </section>
             </aside>
           </div>
@@ -667,7 +741,7 @@ export default function Lab() {
                 {exploration.complete
                   ? 'Exhaustive for this finite model.'
                   : 'Search limit reached; results are partial.'}{' '}
-                Select a square to inspect its execution.
+                Choose a schedule to inspect the order of operations.
               </p>
               <div className="stats">
                 <div className="stat">
@@ -683,14 +757,30 @@ export default function Lab() {
                   <small>pass the invariant</small>
                 </div>
               </div>
+              <div className="schedule-toolbar">
+                <Tabs
+                  value={scheduleFilter}
+                  onValueChange={(value) => setScheduleFilter(String(value))}
+                >
+                  <TabsList
+                    className="schedule-tabs"
+                    aria-label="Filter schedules"
+                  >
+                    <TabsTrigger value="all">All</TabsTrigger>
+                    <TabsTrigger value="fail">Failures</TabsTrigger>
+                    <TabsTrigger value="pass">Passes</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                <span>{visibleSchedules.length} schedules</span>
+              </div>
               <fieldset
-                className="schedule-dots"
+                className="schedule-results"
                 aria-label="Terminal schedules"
               >
-                {exploration.results.map((result, i) => (
+                {visibleSchedules.map(({ result, index: i }) => (
                   <button
                     key={result.schedule.join('')}
-                    className={`schedule-dot ${result.outcome !== 'pass' ? 'fail' : ''}`}
+                    className={`schedule-result ${result.outcome !== 'pass' ? 'fail' : ''}`}
                     aria-pressed={
                       result.schedule.join('') ===
                       session.trace.slice(0, session.cursor).join('')
@@ -708,18 +798,37 @@ export default function Lab() {
                         },
                       });
                     }}
-                  />
+                  >
+                    {result.outcome === 'pass' ? (
+                      <Check size={14} />
+                    ) : (
+                      <CircleAlert size={14} />
+                    )}
+                    <code>
+                      {result.schedule
+                        .map((a) => (a === 0 ? 'A' : 'B'))
+                        .join('')}
+                    </code>
+                  </button>
                 ))}
               </fieldset>
+              {visibleSchedules.length === 0 && (
+                <p className="schedule-empty">
+                  {scheduleFilter === 'fail'
+                    ? 'No failing schedules found.'
+                    : 'No passing schedules found.'}
+                  {!exploration.complete && ' The search is partial.'}
+                </p>
+              )}
               <div className="legend">
-                Green = pass · Coral = failure or deadlock. Counts are not
-                probabilities.
+                A and B show worker order. Checks mark passes; alerts mark
+                failures or deadlocks. Counts are not probabilities.
               </div>
             </section>
             <section className="explanation">
               <h2>
                 {session.mode === 'buggy'
-                  ? 'Why it breaks'
+                  ? 'Why the bug happens'
                   : 'Why the fix works'}
               </h2>
               <p>
@@ -755,6 +864,46 @@ export default function Lab() {
           </footer>
         </main>
       </SidebarProvider>
+      {!assistantOpen && !saveOpen && !guideOpen && (
+        <nav className="mobile-scheduler" aria-label="Mobile worker controls">
+          <div className="mobile-scheduler-status">
+            <span>
+              {playing
+                ? `Replaying · Step ${session.cursor}`
+                : 'Choose the next worker'}
+            </span>
+            {playing ? (
+              <button
+                className="mobile-pause"
+                onClick={() => setPlaying(false)}
+                aria-label="Pause mobile replay"
+              >
+                <Pause size={12} /> Pause
+              </button>
+            ) : (
+              <span className="mono">Step {session.cursor}</span>
+            )}
+          </div>
+          <div>
+            {([0, 1] as Actor[]).map((actor) => (
+              <Button
+                key={actor}
+                className={actor === 0 ? 'mobile-actor-a' : 'mobile-actor-b'}
+                disabled={!available.includes(actor) || playing}
+                aria-label={`Run next operation for worker ${actor === 0 ? 'A' : 'B'}`}
+                onClick={() => step(actor)}
+              >
+                <ArrowRight size={16} />
+                {run.frame.pc[actor] === program.steps[actor].length
+                  ? `${actor === 0 ? 'A' : 'B'} finished`
+                  : !available.includes(actor)
+                    ? `${actor === 0 ? 'A' : 'B'} blocked`
+                    : `Step ${actor === 0 ? 'A' : 'B'}`}
+              </Button>
+            ))}
+          </div>
+        </nav>
+      )}
       {assistantMounted && (
         <Suspense
           fallback={
