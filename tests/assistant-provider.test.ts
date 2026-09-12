@@ -11,12 +11,7 @@ const context = {
 };
 function stub() {
   const calls = { started: 0, stopped: 0, terminated: 0, cacheRemoved: 0 };
-  const worker = {
-    terminate() {
-      calls.terminated++;
-    },
-    addEventListener() {},
-  } as unknown as Worker;
+  const workers: EventTarget[] = [];
   const engine = {
     interruptGenerate() {
       calls.stopped++;
@@ -34,7 +29,15 @@ function stub() {
   };
   const runtime: BrowserRuntime = {
     supported: () => true,
-    worker: () => worker,
+    worker: () => {
+      const worker = Object.assign(new EventTarget(), {
+        terminate() {
+          calls.terminated++;
+        },
+      });
+      workers.push(worker);
+      return worker as unknown as Worker;
+    },
     engine: async () => {
       calls.started++;
       return engine as unknown as Awaited<ReturnType<BrowserRuntime['engine']>>;
@@ -43,8 +46,83 @@ function stub() {
       calls.cacheRemoved++;
     },
   };
-  return { runtime, calls };
+  return { runtime, calls, workers };
 }
+
+void test('an idle worker failure invalidates the model and permits a clean reload', async () => {
+  const { runtime, calls, workers } = stub();
+  const p = createBrowserAssistant(runtime);
+  await p.load(() => {});
+  workers[0].dispatchEvent(new Event('error'));
+  await assert.rejects(
+    () => p.stream(context, [], 'Explain', () => {}),
+    /Enable/,
+  );
+  assert.equal(calls.terminated, 1);
+  await p.load(() => {});
+  assert.equal(calls.started, 2);
+  assert.equal(
+    await p.stream(context, [], 'Explain', () => {}),
+    'Counter is 1.',
+  );
+  p.dispose();
+});
+
+void test('a retired worker cannot cancel a replacement model loading', async () => {
+  const { runtime, workers } = stub();
+  const normal = runtime.engine;
+  const p = createBrowserAssistant(runtime);
+  await p.load(() => {});
+  p.dispose();
+  let resolve!: (engine: Awaited<ReturnType<BrowserRuntime['engine']>>) => void;
+  runtime.engine = () =>
+    new Promise((r) => {
+      resolve = r;
+    });
+  const pending = p.load(() => {});
+  workers[0].dispatchEvent(new Event('error'));
+  resolve(await normal(workers[1] as Worker, () => {}));
+  await pending;
+  assert.equal(
+    await p.stream(context, [], 'Explain', () => {}),
+    'Counter is 1.',
+  );
+  p.dispose();
+});
+
+void test('worker failures interrupt active generation with a retryable error', async () => {
+  const { runtime, calls, workers } = stub();
+  runtime.engine = async () =>
+    ({
+      interruptGenerate() {},
+      chat: { completions: { create: () => new Promise(() => {}) } },
+    }) as unknown as Awaited<ReturnType<BrowserRuntime['engine']>>;
+  const p = createBrowserAssistant(runtime);
+  await p.load(() => {});
+  const pending = p.stream(context, [], 'Explain', () => {});
+  workers[0].dispatchEvent(new Event('error'));
+  await assert.rejects(pending, /worker stopped/);
+  assert.equal(calls.terminated, 1);
+});
+
+void test('message decoding failures cancel loading and allow retry', async () => {
+  const { runtime, calls, workers } = stub();
+  const normal = runtime.engine;
+  runtime.engine = () => new Promise(() => {});
+  const p = createBrowserAssistant(runtime);
+  const pending = p.load(() => {});
+  workers[0].dispatchEvent(new Event('messageerror'));
+  await assert.rejects(pending, /worker stopped/);
+  assert.equal(calls.terminated, 1);
+  runtime.engine = normal;
+  await p.load(() => {});
+  workers[0].dispatchEvent(new Event('messageerror'));
+  assert.equal(
+    await p.stream(context, [], 'Explain', () => {}),
+    'Counter is 1.',
+  );
+  p.dispose();
+});
 void test('unsupported devices do not create workers or download models', async () => {
   const { runtime, calls } = stub();
   runtime.supported = () => false;

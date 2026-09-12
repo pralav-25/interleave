@@ -57,9 +57,9 @@ export function createBrowserAssistant(
   let generation = 0;
   let cancelled = false;
   let rejectPending: ((error: Error) => void) | null = null;
-  function dispose() {
+  function dispose(error = new Error('AI operation cancelled.')) {
     generation++;
-    rejectPending?.(new Error('AI operation cancelled.'));
+    rejectPending?.(error);
     rejectPending = null;
     engine?.interruptGenerate();
     worker?.terminate();
@@ -96,13 +96,18 @@ export function createBrowserAssistant(
       const current = ++generation;
       cancelled = false;
       worker = runtime.worker();
-      worker.addEventListener('error', () => {
-        rejectPending?.(
+      const workerFailed = () => {
+        // A queued event from a retired worker must not touch its replacement.
+        if (current !== generation) return;
+        // Invalidate idle engines too: there may be no pending promise to reject.
+        dispose(
           new Error(
             'The AI worker stopped. Reload the local model to try again.',
           ),
         );
-      });
+      };
+      worker.addEventListener('error', workerFailed);
+      worker.addEventListener('messageerror', workerFailed);
       try {
         const loaded = await guarded(
           runtime.engine(worker, (report) => {

@@ -17,6 +17,8 @@ Use a browser and device with WebGPU available. The model weight manifest inspec
 
 Unsupported devices, failed downloads, worker errors, empty responses, and timeouts produce an actionable error. Loading has a five-minute timeout; generation has a two-minute timeout. Cancelling loading terminates the worker, and retries start a clean initialization. The send control remains disabled until a stopped generation has settled. The rest of the product remains usable without a model.
 
+A worker failure also clears an idle model, so the next question prompts a clean reload. Late errors from a cancelled worker cannot interrupt its replacement. Worker message-decoding failures follow the same recovery path.
+
 ## Grounding and privacy
 
 `features/assistant/context.ts` replays the selected schedule and enumerates the finite model. It supplies the actual state, operation order, invariant, status, counts, assumptions, explanation, and primary reference. The assistant receives a snapshot of that trace, bounded recent discussion, and the current question. Changing the experiment, mode, or execution hides the previous trace's conversation. History is capped at six messages and 2,400 characters; questions are capped at 1,200 characters. A very token-dense question can still exceed the model context and produce an error; shorten it and retry.
