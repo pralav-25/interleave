@@ -216,3 +216,42 @@ void test('bounded JSON reader validates content type, actual bytes and malforme
     );
   }
 });
+
+void test('JSON media types are case-insensitive and accept parameters', async () => {
+  for (const contentType of [
+    'Application/JSON',
+    'APPLICATION/JSON; CHARSET=UTF-8',
+    'application/json;charset=utf-8',
+    'application/json ; charset="utf-8"',
+  ]) {
+    const request = new Request('https://test', {
+      method: 'POST',
+      headers: { 'Content-Type': contentType },
+      body: '{"ok":true}',
+    });
+    assert.deepEqual(await readJson(request), { ok: true }, contentType);
+  }
+});
+
+void test('unsupported JSON lookalikes fail before consuming the request body', async () => {
+  for (const contentType of [
+    undefined,
+    'text/plain',
+    'application/jsonp',
+    'application/json-seq',
+    'application/json+custom',
+    'application/json, text/plain',
+  ]) {
+    const request = new Request('https://test', {
+      method: 'POST',
+      headers: contentType ? { 'Content-Type': contentType } : {},
+      body: new TextEncoder().encode('{"ok":true}'),
+    });
+    await assert.rejects(
+      () => readJson(request),
+      (error: unknown) => error instanceof StoreError && error.status === 415,
+      String(contentType),
+    );
+    assert.equal(request.bodyUsed, false, String(contentType));
+  }
+});
