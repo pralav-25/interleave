@@ -54,6 +54,7 @@ import {
   outcome,
   replay,
   traceMarkdown,
+  traceJSON,
   type Actor,
   type Mode,
   type Value,
@@ -243,20 +244,20 @@ export default function Lab() {
       setFallbackUrl(url);
     }
   }
-  function download() {
+  function download(format: 'md' | 'json' = 'md') {
     const blob = new Blob(
-      [traceMarkdown(experiment, session.mode, run, shareUrl())],
-      { type: 'text/markdown;charset=utf-8' },
+      [(format === 'json' ? traceJSON : traceMarkdown)(experiment, session.mode, run, shareUrl())],
+      { type: format === 'json' ? 'application/json' : 'text/markdown;charset=utf-8' },
     );
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `interleave-${session.id}-${session.mode}.md`;
+    anchor.download = `interleave-${session.id}-${session.mode}.${format}`;
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    setNotice('Trace exported as Markdown.');
+    setNotice(`Trace exported as ${format === 'json' ? 'JSON' : 'Markdown'}.`);
   }
   const failure = status === 'fail' || status === 'deadlock';
   return (
@@ -732,9 +733,13 @@ export default function Lab() {
                   <GitBranch size={17} />
                   Every possible schedule
                 </h2>
-                <Button variant="ghost" onClick={download}>
+                <Button variant="ghost" onClick={() => download()}>
                   <Download size={15} />
                   Export this trace
+                </Button>
+                <Button variant="ghost" onClick={() => download('json')}>
+                  <Download size={15} />
+                  Export JSON
                 </Button>
               </div>
               <p>

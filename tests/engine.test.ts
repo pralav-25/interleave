@@ -9,6 +9,7 @@ import {
   outcome,
   replay,
   traceMarkdown,
+  traceJSON,
   type Actor,
 } from '../lib/engine.ts';
 import { experiments } from '../lib/experiments.ts';
@@ -155,4 +156,25 @@ void test('export includes reproducible trace, result, assumptions and attributi
   assert.match(md, /counter": 1/);
   assert.ok(md.includes(e.assumption));
   assert.match(md, /pralav-25/);
+});
+
+void test('JSON traces round-trip executed prefixes, events, locks and outcomes', () => {
+  for (const experiment of experiments) {
+    for (const mode of ['buggy', 'fixed'] as const) {
+      const program = experiment.make(mode);
+      for (const terminal of explore(program).results) {
+        for (const schedule of [[], terminal.schedule.slice(0, 1), terminal.schedule]) {
+          const run = replay(program, schedule);
+          const report = JSON.parse(traceJSON(experiment, mode, run, 'https://example.test/#replay'));
+          assert.equal(report.schema_version, 'interleave/trace/v1');
+          assert.equal(report.outcome, outcome(program, run.frame));
+          assert.deepEqual(replay(program, report.schedule).frame, report.final_state);
+          assert.deepEqual(report.events, run.events);
+          assert.equal(report.events.length, schedule.length);
+          assert.equal(report.assumptions, experiment.assumption);
+          assert.equal(report.notes, undefined);
+        }
+      }
+    }
+  }
 });

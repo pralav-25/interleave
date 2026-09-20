@@ -143,3 +143,12 @@ Technical references: [Go memory model](https://go.dev/ref/mem), [PostgreSQL tra
 If Interleave helped a concurrency bug click, a star helps other developers discover it. Sharing an exact failing replay is even more useful.
 
 [MIT](LICENSE) © 2026 Pralav Singh
+
+### Machine-readable traces
+
+**Export JSON** downloads an `interleave/trace/v1` snapshot of the executed prefix
+at the current cursor. It includes the worker schedule, operations, final shared
+and local state, locks, outcome, invariant, assumptions, and a replay URL. Private
+investigation titles, notes, and AI chat are excluded. The existing Markdown
+export remains available for readable reports; JSON is useful for comparing
+executions or analyzing them in another tool.
