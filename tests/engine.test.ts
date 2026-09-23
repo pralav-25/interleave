@@ -113,6 +113,24 @@ void test('reject unknown, malformed, impossible, oversized and unsupported repl
   ])
     assert.throws(() => decodeReplay(h, experiments));
 });
+void test('replay links reject repeated parameters instead of silently picking a trace', () => {
+  const valid = encodeReplay('lost-update', 'buggy', [0, 1]);
+  for (const extra of [
+    'v=1',
+    'lab=deadlock',
+    'mode=fixed',
+    'trace=AAA',
+    'tr%61ce=',
+  ])
+    assert.throws(
+      () => decodeReplay(`${valid}&${extra}`, experiments),
+      /invalid/,
+    );
+  assert.deepEqual(
+    decodeReplay(`${valid}&utm_source=notes`, experiments)?.schedule,
+    [0, 1],
+  );
+});
 void test('rewind and branch discard the abandoned future', () => {
   const loaded = sessionReducer(initialSession, {
     type: 'load',

@@ -147,6 +147,7 @@ export function decodeReplay(
   const mode = p.get('mode');
   const trace = p.get('trace') ?? '';
   if (
+    ['v', 'lab', 'mode', 'trace'].some((key) => p.getAll(key).length > 1) ||
     p.get('v') !== '1' ||
     !experiments.some((e) => e.id === id) ||
     (mode !== 'buggy' && mode !== 'fixed') ||
