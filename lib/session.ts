@@ -31,6 +31,7 @@ export function sessionReducer(state: Session, action: Action): Session {
     case 'reset':
       return { ...state, trace: [], cursor: 0 };
     case 'seek':
+      if (!Number.isFinite(action.cursor)) return state;
       return {
         ...state,
         cursor: Math.max(

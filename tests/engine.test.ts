@@ -124,6 +124,20 @@ void test('rewind and branch discard the abandoned future', () => {
   assert.equal(branch.cursor, 2);
   assert.equal(loaded.trace.length, 6);
 });
+void test('nonfinite seeks preserve the current frame and finite seeks still clamp', () => {
+  const state = sessionReducer(initialSession, { type: 'step', actor: 0 });
+  for (const cursor of [NaN, Infinity, -Infinity]) {
+    const next = sessionReducer(state, { type: 'seek', cursor });
+    assert.equal(next, state);
+    assert.deepEqual(
+      sessionReducer(next, { type: 'step', actor: 1 }).trace,
+      [0, 1],
+    );
+  }
+  assert.equal(sessionReducer(state, { type: 'seek', cursor: -5 }).cursor, 0);
+  assert.equal(sessionReducer(state, { type: 'seek', cursor: 99 }).cursor, 1);
+  assert.equal(sessionReducer(state, { type: 'seek', cursor: 0.9 }).cursor, 0);
+});
 void test('mode changes reset incompatible traces; disabled steps and invalid loads do nothing', () => {
   let s = sessionReducer(initialSession, { type: 'step', actor: 0 });
   s = sessionReducer(s, { type: 'mode', mode: 'fixed' });
