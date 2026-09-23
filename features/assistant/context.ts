@@ -20,6 +20,8 @@ export const MAX_HISTORY_CHARS = 2400;
 export function verifiedContext(input: TraceContext) {
   const experiment = experiments.find((e) => e.id === input.id);
   if (!experiment) throw new Error('Unknown experiment.');
+  if (input.mode !== 'buggy' && input.mode !== 'fixed')
+    throw new Error('Unknown experiment mode.');
   const program = experiment.make(input.mode);
   const run = replay(program, input.schedule);
   const all = explore(program);

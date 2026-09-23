@@ -76,4 +76,14 @@ void test('questions and conversation history are bounded', () => {
 void test('unsupported or impossible contexts fail closed', () => {
   assert.throws(() => verifiedContext({ ...context, id: 'injected' }));
   assert.throws(() => verifiedContext({ ...context, mode: 'fixed' }));
+  for (const mode of ['unknown', '', null, undefined])
+    assert.throws(
+      () =>
+        verifiedContext({
+          ...context,
+          schedule: [],
+          mode: mode as typeof context.mode,
+        }),
+      /mode/i,
+    );
 });
