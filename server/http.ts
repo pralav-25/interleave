@@ -17,7 +17,12 @@ export async function readJson(
   request: Request,
   maxBytes = 48000,
 ): Promise<unknown> {
-  if (!request.headers.get('content-type')?.startsWith('application/json'))
+  const mediaType = request.headers
+    .get('content-type')
+    ?.split(';', 1)[0]
+    .trim()
+    .toLowerCase();
+  if (mediaType !== 'application/json')
     throw new StoreError(415, 'Send JSON content.');
   if (Number(request.headers.get('content-length')) > maxBytes)
     throw new StoreError(413, 'Request is too large.');
@@ -46,7 +51,9 @@ export async function readJson(
     offset += part.length;
   }
   try {
-    return JSON.parse(new TextDecoder().decode(bytes)) as unknown;
+    return JSON.parse(
+      new TextDecoder('utf-8', { fatal: true }).decode(bytes),
+    ) as unknown;
   } catch {
     throw new StoreError(400, 'Request contains invalid JSON.');
   }

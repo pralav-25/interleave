@@ -216,3 +216,49 @@ void test('bounded JSON reader validates content type, actual bytes and malforme
     );
   }
 });
+void test('JSON media types match exactly and case-insensitively', async () => {
+  for (const contentType of [
+    'application/jsonp',
+    'application/json-extra',
+    'text/json',
+  ])
+    await assert.rejects(
+      readJson(
+        new Request('https://test', {
+          method: 'POST',
+          headers: { 'Content-Type': contentType },
+          body: '{}',
+        }),
+      ),
+      (error: unknown) => error instanceof StoreError && error.status === 415,
+    );
+  assert.deepEqual(
+    await readJson(
+      new Request('https://test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'Application/JSON; charset=utf-8' },
+        body: '{"notes":"café"}',
+      }),
+    ),
+    { notes: 'café' },
+  );
+});
+void test('invalid UTF-8 is rejected without silently replacing saved note text', async () => {
+  const body = new Uint8Array([
+    ...new TextEncoder().encode('{"notes":"'),
+    0xc3,
+    0x28,
+    0x22,
+    0x7d,
+  ]);
+  await assert.rejects(
+    readJson(
+      new Request('https://test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body,
+      }),
+    ),
+    (error: unknown) => error instanceof StoreError && error.status === 400,
+  );
+});
