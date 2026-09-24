@@ -161,6 +161,28 @@ export function decodeReplay(
   replay(experiment.make(mode), schedule);
   return { id, mode, schedule };
 }
+/** A portable snapshot of the executed prefix, with no private workspace data. */
+export function traceJSON(
+  experiment: Experiment,
+  mode: Mode,
+  run: Run,
+  url: string,
+): string {
+  const program = experiment.make(mode);
+  return JSON.stringify({
+    schema_version: 'interleave/trace/v1',
+    experiment: { id: experiment.id, title: experiment.title },
+    mode,
+    outcome: outcome(program, run.frame),
+    schedule: run.schedule,
+    events: run.events,
+    final_state: run.frame,
+    invariant: program.expected,
+    assumptions: experiment.assumption,
+    replay_url: url,
+  }, null, 2) + '\n';
+}
+
 export function traceMarkdown(
   experiment: Experiment,
   mode: Mode,
