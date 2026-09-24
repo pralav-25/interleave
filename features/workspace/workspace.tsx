@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   Workflow,
@@ -33,6 +33,10 @@ import {
 import { experiments } from '@/lib/experiments';
 import { encodeReplay } from '@/lib/engine';
 import {
+  filterInvestigations,
+  type InvestigationSort,
+} from '@/lib/investigation-search';
+import {
   decodeTrace,
   MAX_INVESTIGATIONS,
   type Investigation,
@@ -45,6 +49,23 @@ export function Workspace({ email }: { email: string }) {
   const [deleting, setDeleting] = useState<Investigation | null>(null);
   const [busy, setBusy] = useState(false);
   const [editError, setEditError] = useState('');
+  const [query, setQuery] = useState('');
+  const [experimentId, setExperimentId] = useState('');
+  const [mode, setMode] = useState<'' | Investigation['mode']>('');
+  const [sort, setSort] = useState<InvestigationSort>('recent');
+  const visibleItems = useMemo(
+    () => filterInvestigations(items, { query, experimentId, mode, sort }),
+    [items, query, experimentId, mode, sort],
+  );
+  const hasFilters = Boolean(
+    query || experimentId || mode || sort !== 'recent',
+  );
+  function resetFilters() {
+    setQuery('');
+    setExperimentId('');
+    setMode('');
+    setSort('recent');
+  }
   const refresh = useCallback((signal?: AbortSignal) => {
     return fetch('/api/investigations', { signal })
       .then(async (r) => {
@@ -151,10 +172,76 @@ export function Workspace({ email }: { email: string }) {
             New investigation
           </Link>
         </div>
+        <section
+          className="investigation-filters"
+          aria-label="Find saved investigations"
+        >
+          <label className="investigation-search" htmlFor="investigation-query">
+            Search investigations
+            <Input
+              id="investigation-query"
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Title, notes, or experiment"
+            />
+          </label>
+          <div className="investigation-field">
+            <label htmlFor="investigation-experiment">Experiment</label>
+            <select
+              id="investigation-experiment"
+              value={experimentId}
+              onChange={(event) => setExperimentId(event.target.value)}
+            >
+              <option value="">All experiments</option>
+              {experiments.map((experiment) => (
+                <option key={experiment.id} value={experiment.id}>
+                  {experiment.title}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="investigation-field">
+            <label htmlFor="investigation-mode">Implementation</label>
+            <select
+              id="investigation-mode"
+              value={mode}
+              onChange={(event) =>
+                setMode(event.target.value as '' | Investigation['mode'])
+              }
+            >
+              <option value="">Bug and fix</option>
+              <option value="buggy">Bug</option>
+              <option value="fixed">Fix</option>
+            </select>
+          </div>
+          <div className="investigation-field">
+            <label htmlFor="investigation-sort">Sort by</label>
+            <select
+              id="investigation-sort"
+              value={sort}
+              onChange={(event) =>
+                setSort(event.target.value as InvestigationSort)
+              }
+            >
+              <option value="recent">Recently updated</option>
+              <option value="oldest">Oldest updated</option>
+              <option value="title">Title A–Z</option>
+            </select>
+          </div>
+        </section>
         <div className="workspace-toolbar">
-          <span>
-            {items.length} / {MAX_INVESTIGATIONS} saved
-          </span>
+          <output>
+            {loading
+              ? 'Loading…'
+              : `${visibleItems.length} of ${items.length} shown`}{' '}
+            · {MAX_INVESTIGATIONS} save limit
+          </output>
+          {hasFilters && (
+            <Button variant="ghost" onClick={resetFilters}>
+              Clear filters
+            </Button>
+          )}
           <Button
             variant="ghost"
             onClick={() => {
@@ -188,9 +275,20 @@ export function Workspace({ email }: { email: string }) {
               Explore the lab →
             </Link>
           </section>
+        ) : visibleItems.length === 0 ? (
+          <section className="workspace-empty">
+            <h2>No investigations match.</h2>
+            <p>
+              Try a different search or clear the filters to see all saved
+              investigations.
+            </p>
+            <Button variant="outline" onClick={resetFilters}>
+              Clear filters
+            </Button>
+          </section>
         ) : (
           <div className="investigation-grid">
-            {items.map((item) => (
+            {visibleItems.map((item) => (
               <article key={item.id} className="investigation-card">
                 <div className="investigation-meta">
                   <span>

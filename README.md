@@ -60,6 +60,7 @@ A compact toolbar separates execution from save, share, and AI tools. Live execu
 
 - **Trace-aware AI.** Ask for an explanation, a hint, or the limits of a fix. A real Qwen 2.5 model runs through WebLLM in a dedicated browser worker. Its context is rebuilt from the deterministic engine; verified facts and generated explanations are displayed separately.
 - **Private workspace.** Save an execution with a title and notes, reopen the exact schedule, and edit or delete it later. Investigations are stored in Cloudflare D1 and scoped to the signed-in account.
+- **Find saved work.** Search investigation titles, notes, or experiment names; combine experiment and bug/fix filters, and sort by update time or title. A live result count and Clear filters keep larger workspaces easy to navigate. Search stays in the browser and is not added to replay URLs.
 - **Safe concurrent edits.** Revision checks reject stale edits or deletes instead of silently overwriting a newer version. An atomic quota check limits each account to 50 investigations.
 - **Public sharing, deliberately.** Share a replay URL or export Markdown. Replay URLs contain the experiment and schedule, not your private title or notes.
 

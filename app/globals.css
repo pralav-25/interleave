@@ -1336,6 +1336,8 @@ kbd {
 }
 .workspace-toolbar {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
   justify-content: space-between;
   align-items: center;
   padding: 22px 0 16px;
@@ -1343,6 +1345,44 @@ kbd {
   border-top: 1px solid #323b2c;
   font-size: 14px;
   color: #bbc8b3;
+}
+.investigation-filters {
+  display: grid;
+  grid-template-columns: minmax(200px, 2fr) repeat(3, minmax(130px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+.investigation-filters label,
+.investigation-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  color: #c6d1bf;
+  font-size: 13px;
+}
+.investigation-filters select {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #1b2123;
+  color: var(--foreground);
+}
+.investigation-filters select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+@media (max-width: 850px) {
+  .investigation-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 500px) {
+  .investigation-filters {
+    grid-template-columns: 1fr;
+  }
 }
 .workspace-empty {
   min-height: 310px;
