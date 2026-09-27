@@ -1,16 +1,22 @@
 .product-site {
-  /* Match the Xcode product site's dark palette and typography scale. */
+  /* Dark glass surfaces over the Xcode-inspired black canvas and type scale. */
+  display: flow-root;
   --background: #000;
-  --surface: #1d1d1f;
-  --surface-muted: #141414;
+  --surface: #15191f;
+  --surface-muted: #080a0d;
   --ink: #f5f5f7;
-  --soft: #aaa;
-  --blue: #2997ff;
-  --button-fill: #0071e3;
+  --soft: #b1b8c4;
+  --blue: #84bbff;
+  --button-fill: #0864b8;
   --accent-ink: #fff;
-  --accent-hover: #0073e6;
-  --accent-soft: #242426;
-  --line: #424245;
+  --accent-hover: #096abd;
+  --accent-soft: #242c38;
+  --line: #ffffff26;
+  --glass-tint: #111720b8;
+  --glass-fallback: #151a22;
+  --glass-sheen: linear-gradient(135deg, #ffffff12, #ffffff03 45%, #98baff09);
+  --glass-shadow:
+    inset 0 1px 0 #ffffff24, inset 0 -1px 0 #ffffff06, 0 12px 40px #0006;
   --success: #23633c;
   --warning: #f0c674;
   --error: #ff9f9f;
@@ -26,7 +32,7 @@
   --content: 61.25rem;
   --gutter: clamp(1.25rem, 4vw, 1.5rem);
   --radius-control: 1.5rem;
-  --radius-card: 1.25rem;
+  --radius-card: 1.75rem;
   --shadow-elevated: 0 12px 36px #0006;
   --motion-fast: 140ms;
   --motion-standard: 220ms;
@@ -73,28 +79,57 @@
 .product-site :is(section, [id]) {
   scroll-margin-top: 6rem;
 }
+.product-site
+  :is(
+    .product-nav-inner,
+    .product-proof,
+    .showcase-tabs,
+    .experiment-card,
+    .workflow-grid article,
+    .install-inner,
+    .faq-list details,
+    .install-help
+  ) {
+  background-color: var(--glass-fallback);
+  background-image: var(--glass-sheen);
+  border: 1px solid var(--line);
+  box-shadow: var(--glass-shadow);
+}
+@supports (backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)) {
+  .product-site
+    :is(
+      .product-nav-inner,
+      .product-proof,
+      .showcase-tabs,
+      .experiment-card,
+      .workflow-grid article,
+      .install-inner,
+      .faq-list details,
+      .install-help
+    ) {
+    background-color: var(--glass-tint);
+    -webkit-backdrop-filter: blur(20px) saturate(135%);
+    backdrop-filter: blur(20px) saturate(135%);
+  }
+}
 .product-nav {
   position: sticky;
-  top: 0;
+  top: 0.75rem;
   z-index: 30;
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
-}
-@supports (backdrop-filter: blur(16px)) {
-  .product-nav {
-    background: #1d1d1fb8;
-    backdrop-filter: blur(16px);
-  }
+  width: calc(100% - 1.5rem);
+  max-width: var(--content);
+  margin: 0.75rem auto 0;
 }
 .product-nav-inner {
   max-width: var(--content);
-  min-height: 3.25rem;
+  min-height: 3.75rem;
   margin: auto;
-  padding: 0 var(--gutter);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 .product-brand {
   display: inline-flex;
@@ -154,22 +189,35 @@
 }
 .nav-cta,
 .product-primary {
-  background: var(--button-fill);
+  background:
+    linear-gradient(150deg, #ffffff0a, #ffffff00 65%), var(--button-fill);
   color: var(--accent-ink) !important;
+  border-color: #a6d0ff42;
+  box-shadow:
+    inset 0 1px 0 #ffffff40,
+    inset 0 -1px 0 #001f4855,
+    0 4px 20px #0055bb26;
 }
 .nav-cta:hover,
 .product-primary:hover:not(:disabled) {
-  background: var(--accent-hover);
+  background-color: var(--accent-hover);
+  border-color: #c6e2ff80;
 }
 .product-site .nav-cta {
-  padding: 0;
-  background: transparent;
+  padding: var(--space-2) var(--space-3);
+  background: linear-gradient(150deg, #ffffff16, #ffffff05);
+  border-color: #ffffff26;
+  box-shadow:
+    inset 0 1px 0 #ffffff2e,
+    0 3px 12px #0003;
   color: var(--ink) !important;
   font-size: 0.75rem;
   font-weight: 400;
 }
 .product-site .nav-cta:hover {
-  color: var(--blue) !important;
+  color: var(--ink) !important;
+  background-color: #ffffff0d;
+  border-color: #ffffff4d;
 }
 .product-secondary {
   border-color: var(--line);
@@ -200,6 +248,7 @@
   isolation: isolate;
   text-align: center;
   padding: 4.25rem var(--gutter) 0;
+  background: radial-gradient(ellipse at 50% 65%, #6689cb14, transparent 62%);
 }
 .hero-glyphs {
   position: absolute;
@@ -210,7 +259,7 @@
   transform: translateX(-50%);
   width: min(100%, var(--content));
   height: 17rem;
-  opacity: 0.6;
+  opacity: 0.45;
   overflow: hidden;
   mask-image: radial-gradient(ellipse at 50% 0%, #000 12%, transparent 72%);
 }
@@ -219,6 +268,9 @@
   width: 6rem;
   height: 6rem;
   margin: auto;
+  box-shadow:
+    0 0 0 1px #c0d6ff24,
+    0 16px 40px #0008;
 }
 .product-kicker {
   font-size: 1.3125rem;
@@ -312,11 +364,11 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-6);
+  width: calc(100% - 2 * var(--gutter));
   max-width: var(--content);
   margin: 0 auto 4.25rem;
   padding: var(--space-6);
   border-radius: var(--radius-card);
-  background: var(--surface);
 }
 .product-proof > div {
   display: flex;
@@ -335,7 +387,7 @@
 }
 .walkthrough,
 .faq-section {
-  background: var(--surface);
+  background: radial-gradient(ellipse at 50% 45%, #40609419, transparent 68%);
 }
 .section-heading {
   text-align: left;
@@ -362,17 +414,21 @@
   isolation: isolate;
   max-width: 43rem;
   margin: 0 auto var(--space-8);
-  padding: 0;
-  border-bottom: 1px solid var(--line);
+  padding: 6px;
+  border-radius: 2rem;
 }
 .showcase-tabs::before {
   content: '';
   position: absolute;
-  inset: auto auto -1px 0;
-  width: calc(100% / 3);
-  height: 1px;
+  inset: 6px auto 6px 6px;
+  width: calc((100% - 12px) / 3);
   z-index: -1;
-  background: var(--ink);
+  border-radius: var(--radius-control);
+  border: 1px solid #ffffff30;
+  background: linear-gradient(145deg, #ffffff20, #ffffff08 75%);
+  box-shadow:
+    inset 0 1px 0 #ffffff45,
+    0 3px 12px #0004;
   transform: translateX(calc(var(--active-tab) * 100%));
   transition: transform var(--motion-standard) var(--ease-move);
 }
@@ -452,7 +508,7 @@
   max-width: 75ch;
 }
 .experiment-section {
-  background: var(--background);
+  background: radial-gradient(ellipse at 15% 45%, #4b608c1c, transparent 65%);
 }
 .experiment-grid {
   display: grid;
@@ -460,8 +516,6 @@
   gap: var(--space-4);
 }
 .experiment-card {
-  background: var(--surface);
-  border: 1px solid transparent;
   border-radius: var(--radius-card);
   padding: var(--space-8);
   position: relative;
@@ -472,9 +526,9 @@
     border-color var(--motion-fast) var(--ease-move),
     transform var(--motion-fast) var(--ease-move);
 }
-.experiment-card:hover {
-  background: var(--surface);
-  border-color: #6e6e73;
+.product-site .experiment-card:hover {
+  background-color: #222c3bbf;
+  border-color: #bfd7ff5e;
 }
 .experiment-number {
   font-size: 0.875rem;
@@ -510,12 +564,16 @@
   color: var(--blue);
 }
 .workflow-section {
-  background: var(--surface-muted);
+  background: radial-gradient(ellipse at 85% 65%, #4b608c16, transparent 65%);
 }
 .workflow-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-12);
+  gap: var(--space-6);
+}
+.workflow-grid article {
+  padding: var(--space-6);
+  border-radius: var(--radius-card);
 }
 .workflow-grid article > svg {
   color: var(--blue);
@@ -534,13 +592,17 @@
   margin: 0 0 var(--space-4);
 }
 .install-section {
-  background: var(--background);
+  background: radial-gradient(ellipse at 50% 30%, #44639922, transparent 52%);
   padding: 4.25rem var(--gutter);
   text-align: center;
 }
 .install-inner {
+  position: relative;
+  z-index: 2;
   max-width: 43rem;
   margin: auto;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border-radius: 2rem;
 }
 .install-icon {
   margin-bottom: var(--space-8);
@@ -583,6 +645,7 @@
   position: relative;
 }
 .product-site .install-help {
+  --glass-tint: #131820ed;
   position: absolute;
   z-index: 40;
   left: 50%;
@@ -591,10 +654,7 @@
   width: min(25rem, calc(100vw - 2rem));
   padding: var(--space-6);
   text-align: left;
-  background: var(--surface);
   color: var(--ink);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-elevated);
   border-radius: var(--radius-card);
   font-size: 1rem;
   animation: help-enter var(--motion-standard) var(--ease-enter);
@@ -621,8 +681,9 @@
   display: block;
   min-height: 44px;
   margin-top: var(--space-4);
-  border: 1px solid transparent;
-  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, #ffffff12, #ffffff04);
+  box-shadow: inset 0 1px 0 #ffffff26;
   color: var(--blue);
   border-radius: var(--radius-control);
   padding: var(--space-2) var(--space-4);
@@ -633,7 +694,7 @@
     transform var(--motion-fast) var(--ease-move);
 }
 .product-site .install-dismiss:hover {
-  background: #333336;
+  background-color: var(--accent-soft);
 }
 .faq-section {
   display: grid;
@@ -641,11 +702,9 @@
   gap: var(--space-8);
 }
 .faq-list details {
-  border-bottom: 1px solid var(--line);
-  padding: var(--space-4) 0;
-}
-.faq-list details:first-child {
-  padding-top: 0;
+  margin-bottom: var(--space-3);
+  border-radius: 1.25rem;
+  padding: var(--space-3) var(--space-6);
 }
 .faq-list summary {
   display: flex;
@@ -728,6 +787,8 @@
   min-height: 44px;
 }
 .installed-preview {
+  position: relative;
+  z-index: 1;
   max-width: var(--content);
   margin: var(--space-8) auto 0;
 }
@@ -786,6 +847,7 @@
   }
   .product-nav-inner {
     gap: var(--space-6);
+    padding-inline: var(--space-6);
   }
   .product-proof {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -796,7 +858,7 @@
   }
   .workflow-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-8);
+    gap: var(--space-6);
   }
   .scene-caption {
     flex-direction: row;
@@ -859,7 +921,39 @@
     font-size: 1.1875rem;
   }
   .product-proof {
-    margin: 0 var(--gutter) var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+}
+@media (max-width: 24rem) {
+  .product-nav-inner {
+    padding-inline: var(--space-2);
+  }
+  .product-nav .product-brand {
+    font-size: 1.125rem;
+  }
+  .product-site .nav-cta {
+    padding-inline: var(--space-2);
+  }
+  .showcase-tabs button {
+    font-size: 0.8125rem;
+  }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .product-site
+    :is(
+      .product-nav-inner,
+      .product-proof,
+      .showcase-tabs,
+      .experiment-card,
+      .workflow-grid article,
+      .install-inner,
+      .faq-list details,
+      .install-help
+    ) {
+    background: var(--glass-fallback);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-color: #6c7584;
   }
 }
 @media (prefers-reduced-motion: reduce) {
