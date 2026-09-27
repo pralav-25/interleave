@@ -17,6 +17,7 @@ import {
 import { InstallButton } from '@/features/product/install';
 import { LegacyReplay } from '@/features/product/legacy-replay';
 import { Showcase } from '@/features/product/showcase';
+import { MacBookPreview } from '@/features/product/macbook-preview';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
 const experiments = [
@@ -93,24 +94,11 @@ export default function Home() {
           </p>
           <div className="hero-product">
             <div className="hero-product-glow" />
-            <div className="screenshot-shell">
-              <div className="window-chrome">
-                <span />
-                <span />
-                <span />
-                <p>Interleave — Concurrency lab</p>
-                <span className="window-local">
-                  <span /> Local execution
-                </span>
-              </div>
-              <img
-                src="/screenshots/lost-update-macos.webp"
-                width="2940"
-                height="1664"
-                alt="The Interleave workbench showing a completed lost-update execution, shared state, in the installed macOS app."
-                fetchPriority="high"
-              />
-            </div>
+            <MacBookPreview
+              src="/screenshots/lost-update-macos.webp"
+              alt="Interleave on a MacBook, showing a completed lost-update execution in the installed macOS app."
+              priority
+            />
           </div>
         </section>
         <section className="product-proof" aria-label="Product capabilities">
@@ -270,12 +258,9 @@ export default function Home() {
             </p>
           </div>
           <figure className="installed-preview">
-            <img
+            <MacBookPreview
               src="/screenshots/mac-app.webp"
-              width="2940"
-              height="1664"
-              loading="lazy"
-              alt="Interleave installed as a standalone app on macOS, showing the lost-update experiment after both workers complete."
+              alt="Interleave installed on a MacBook, showing the lost-update experiment after both workers complete."
             />
             <figcaption>
               Interleave on macOS. A real execution in the installed app.

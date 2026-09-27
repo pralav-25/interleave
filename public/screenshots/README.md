@@ -11,3 +11,5 @@ No private workspace notes, account identifiers, or AI-generated outputs appear 
 - `mac-app.webp`: actual Safari Add to Dock installation on macOS, launched from Applications; keyboard sequence 1, 2, 1, 2, 1, 2 reproduces the lost update. Captured at the native window resolution of 2940 × 1664.
 
 The landing page uses the `*-macos.webp` versions, captured from the installed app after repeating the same three executions. Original browser captures are retained above for comparison.
+
+The MacBook-style presentation frame (`macbook-frame.png`) is an AI-generated decorative asset based on the supplied reference. `MacBookPreview` places the unchanged app captures inside it with a CSS desktop backdrop; a display crop hides the operating system screen-sharing strip. The frame is illustrative, while each app state remains a real capture.

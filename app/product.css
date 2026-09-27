@@ -183,7 +183,7 @@
   background: #9b9da1;
 }
 .hero-product {
-  max-width: 1110px;
+  max-width: 1240px;
   margin: 42px auto 0;
   position: relative;
 }
@@ -196,59 +196,64 @@
   filter: blur(35px);
   pointer-events: none;
 }
-.screenshot-shell {
+.macbook-preview {
   position: relative;
-  overflow: hidden;
-  border-radius: 13px;
-  background: #10151d;
-  border: 1px solid #3b404e;
-  box-shadow:
-    0 32px 70px #192c4430,
-    0 4px 12px #192c4419;
-  text-align: left;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  container-type: inline-size;
+  isolation: isolate;
 }
-.screenshot-shell img {
+.macbook-hardware {
   display: block;
   width: 100%;
   height: auto;
+  position: relative;
+  filter: drop-shadow(0 22px 20px #15223924);
 }
-.window-chrome {
-  height: 32px;
+.macbook-display {
+  position: absolute;
+  left: 10.4167%;
+  top: 10.0586%;
+  width: 79.6875%;
+  height: 73.8281%;
+  overflow: hidden;
+  border-radius: 2% 2% 0 0 / 3.3% 3.3% 0 0;
+  /* Keep the photographed camera notch visible above the composited display. */
+  clip-path: polygon(
+    0 0,
+    44.7% 0,
+    44.7% 3.4%,
+    45.1% 3.9%,
+    54.4% 3.9%,
+    54.8% 3.4%,
+    54.8% 0,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
+  background:
+    radial-gradient(ellipse at 90% 15%, #5448da 0, transparent 57%),
+    radial-gradient(ellipse at 15% 100%, #355fc9 0, transparent 64%),
+    linear-gradient(145deg, #20106c, #14204f 55%, #142343);
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 0 13px;
-  background: #1c222c;
-  color: #a9b1be;
-  font-size: 9px;
+  justify-content: center;
+  padding-top: 1.5%;
 }
-.window-chrome > span:not(.window-local) {
-  height: 7px;
-  width: 7px;
-  border-radius: 50%;
-  background: #fa6b63;
+.macbook-app-window {
+  width: 94%;
+  overflow: hidden;
+  border-radius: 0.9cqw;
+  border: 1px solid #68719080;
+  background: #11151d;
+  box-shadow: 0 1.5cqw 3cqw #0008;
 }
-.window-chrome > span:nth-child(2) {
-  background: #f5bf4f;
-}
-.window-chrome > span:nth-child(3) {
-  background: #60c555;
-}
-.window-chrome p {
-  margin: 0 auto 0 12px;
-  letter-spacing: 0.2px;
-}
-.window-local {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 8px;
-}
-.window-local span {
-  width: 4px;
-  height: 4px;
-  background: #7ecea3;
-  border-radius: 50%;
+.macbook-app-capture {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* The original capture's OS screen-sharing strip is outside the app content. */
+  margin-top: -2%;
 }
 .product-proof {
   display: grid;
@@ -323,9 +328,6 @@
 .showcase-tabs button[aria-selected='true'] {
   background: #e9eef5;
   color: #115baf;
-}
-.showcase .screenshot-shell {
-  box-shadow: 0 20px 40px #192c441c;
 }
 .scene-caption {
   display: flex;
@@ -609,15 +611,6 @@
 #experiments {
   scroll-margin-top: 20px;
 }
-@media (min-width: 1100px) {
-  .hero-product .screenshot-shell {
-    max-height: 720px;
-    overflow: hidden;
-  }
-  .hero-product .screenshot-shell img {
-    margin-bottom: -50px;
-  }
-}
 @media (max-width: 760px) {
   .product-nav-inner {
     padding: 0 18px;
@@ -671,12 +664,6 @@
   }
   .hero-product {
     margin-top: 38px;
-  }
-  .window-local {
-    display: none;
-  }
-  .window-chrome {
-    height: 25px;
   }
   .product-proof {
     grid-template-columns: 1fr 1fr;
@@ -807,13 +794,6 @@
 .installed-preview {
   max-width: 1050px;
   margin: 48px auto 0;
-}
-.installed-preview img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 14px;
-  box-shadow: 0 24px 60px #22385226;
 }
 .installed-preview figcaption {
   font-size: 11px;

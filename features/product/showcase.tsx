@@ -1,6 +1,7 @@
 /* oxlint-disable nextjs/no-img-element -- Pre-optimized local WebP captures, with explicit dimensions and loading priority. */
 'use client';
 import { useState } from 'react';
+import { MacBookPreview } from './macbook-preview';
 import {
   ArrowUpRight,
   CircleAlert,
@@ -87,22 +88,7 @@ export function Showcase() {
         aria-labelledby={`scene-${scene.id}`}
         tabIndex={0}
       >
-        <div className="screenshot-shell">
-          <div className="window-chrome">
-            <span />
-            <span />
-            <span />
-            <p>Interleave / {scene.title}</p>
-            <span className="window-local">Runs on your device</span>
-          </div>
-          <img
-            src={scene.image}
-            alt={scene.alt}
-            width="2940"
-            height="1664"
-            loading="lazy"
-          />
-        </div>
+        <MacBookPreview src={scene.image} alt={scene.alt} />
         <div className="scene-caption">
           <div>
             <h3>{scene.caption}</h3>
