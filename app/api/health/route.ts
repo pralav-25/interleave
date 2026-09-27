@@ -1,3 +1,4 @@
+import { version } from '@/package.json';
 import { database } from '@/server/database';
 import { json } from '@/server/http';
 export async function GET() {
@@ -10,11 +11,11 @@ export async function GET() {
     return json(
       {
         status: ready?.total === 3 ? 'ready' : 'unavailable',
-        version: '0.3.0',
+        version,
       },
       ready?.total === 3 ? 200 : 503,
     );
   } catch {
-    return json({ status: 'unavailable', version: '0.3.0' }, 503);
+    return json({ status: 'unavailable', version }, 503);
   }
 }

@@ -104,10 +104,10 @@ export default function Home() {
                 </span>
               </div>
               <img
-                src="/screenshots/lost-update.webp"
-                width="1440"
-                height="1050"
-                alt="The Interleave workbench showing a completed lost-update execution, shared state, and the execution timeline."
+                src="/screenshots/lost-update-macos.webp"
+                width="2940"
+                height="1664"
+                alt="The Interleave workbench showing a completed lost-update execution, shared state, in the installed macOS app."
                 fetchPriority="high"
               />
             </div>
@@ -148,8 +148,8 @@ export default function Home() {
           </div>
           <Showcase />
           <p className="capture-note">
-            Actual captures from Interleave running locally. Each view links to
-            the same reproducible execution.
+            Actual captures from the installed Interleave app on macOS. Each
+            view links to the same reproducible execution.
           </p>
         </section>
         <section
@@ -269,6 +269,18 @@ export default function Home() {
               hardware and model-download requirements.
             </p>
           </div>
+          <figure className="installed-preview">
+            <img
+              src="/screenshots/mac-app.webp"
+              width="2940"
+              height="1664"
+              loading="lazy"
+              alt="Interleave installed as a standalone app on macOS, showing the lost-update experiment after both workers complete."
+            />
+            <figcaption>
+              Interleave on macOS. A real execution in the installed app.
+            </figcaption>
+          </figure>
         </section>
         <section className="product-section faq-section">
           <div>

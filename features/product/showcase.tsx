@@ -12,7 +12,7 @@ const scenes = [
     id: 'bug',
     title: 'Find the race',
     icon: CircleAlert,
-    image: '/screenshots/lost-update.webp',
+    image: '/screenshots/lost-update-macos.webp',
     alt: 'Interleave running a lost update: two completed workers leave the shared counter at one.',
     caption: 'Two increments. One lost update.',
     text: 'Step through a real execution and see exactly where shared state goes wrong.',
@@ -22,7 +22,7 @@ const scenes = [
     id: 'fix',
     title: 'Verify the fix',
     icon: ShieldCheck,
-    image: '/screenshots/atomic-fix.webp',
+    image: '/screenshots/atomic-fix-macos.webp',
     alt: 'Interleave verifies the atomic increment: both terminal schedules pass the invariant.',
     caption: 'A small change. Every schedule passes.',
     text: 'Switch to an atomic operation and check every terminal schedule in this finite model.',
@@ -32,7 +32,7 @@ const scenes = [
     id: 'deadlock',
     title: 'Untangle a deadlock',
     icon: LockKeyhole,
-    image: '/screenshots/deadlock.webp',
+    image: '/screenshots/deadlock-macos.webp',
     alt: 'Interleave shows two workers blocked while each holds the lock the other needs.',
     caption: 'See the wait. Understand the cycle.',
     text: 'Inspect lock ownership, rewind the timeline, and explore a different order.',
@@ -98,8 +98,8 @@ export function Showcase() {
           <img
             src={scene.image}
             alt={scene.alt}
-            width="1440"
-            height="1050"
+            width="2940"
+            height="1664"
             loading="lazy"
           />
         </div>

@@ -7,3 +7,7 @@ Captured September 27, 2026 from the running local Interleave application at a d
 - `deadlock.webp`: Select Deadlock; step A, B; A holds users and B holds orders. Both workers block. Replay: `/lab#v=1&lab=deadlock&mode=buggy&trace=AB`.
 
 No private workspace notes, account identifiers, or AI-generated outputs appear in these images.
+
+- `mac-app.webp`: actual Safari Add to Dock installation on macOS, launched from Applications; keyboard sequence 1, 2, 1, 2, 1, 2 reproduces the lost update. Captured at the native window resolution of 2940 × 1664.
+
+The landing page uses the `*-macos.webp` versions, captured from the installed app after repeating the same three executions. Original browser captures are retained above for comparison.

@@ -803,3 +803,20 @@
     transition: none !important;
   }
 }
+
+.installed-preview {
+  max-width: 1050px;
+  margin: 48px auto 0;
+}
+.installed-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  box-shadow: 0 24px 60px #22385226;
+}
+.installed-preview figcaption {
+  font-size: 11px;
+  color: #718096;
+  margin-top: 20px;
+}
