@@ -19,6 +19,7 @@ import { Showcase } from '@/features/product/showcase';
 import { MacBookPreview } from '@/features/product/macbook-preview';
 import { ProductMotion } from '@/features/product/motion';
 import { AppLogo } from '@/features/product/app-logo';
+import { GlyphMatrix } from '@/components/ui/glyph-matrix';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
 const experiments = [
@@ -66,6 +67,17 @@ export default function Home() {
       </header>
       <main id="main">
         <section className="product-hero" id="overview">
+          <div className="hero-glyphs" aria-hidden="true">
+            <GlyphMatrix
+              glyphs="01.+*/<>="
+              cellSize={20}
+              mutationRate={0.025}
+              interval={240}
+              fadeBottom={0.9}
+              color="#a1a1a6"
+              duration={3600}
+            />
+          </div>
           <AppLogo className="hero-icon" size={96} />
           <h1>Interleave</h1>
           <p className="hero-description">

@@ -196,8 +196,23 @@
   transform: none;
 }
 .product-hero {
+  position: relative;
+  isolation: isolate;
   text-align: center;
   padding: 4.25rem var(--gutter) 0;
+}
+.hero-glyphs {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, var(--content));
+  height: 17rem;
+  opacity: 0.6;
+  overflow: hidden;
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 12%, transparent 72%);
 }
 .hero-icon,
 .install-icon {
