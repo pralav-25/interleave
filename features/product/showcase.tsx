@@ -2,6 +2,7 @@
 'use client';
 import { useState, type CSSProperties } from 'react';
 import { MacBookPreview } from './macbook-preview';
+import { LiquidGlass } from './liquid-glass';
 import {
   ArrowUpRight,
   CircleAlert,
@@ -45,7 +46,7 @@ export function Showcase() {
   const scene = scenes[active];
   return (
     <div className="showcase">
-      <div
+      <LiquidGlass
         className="showcase-tabs"
         role="tablist"
         aria-label="Product walkthrough"
@@ -82,7 +83,7 @@ export function Showcase() {
             {item.title}
           </button>
         ))}
-      </div>
+      </LiquidGlass>
       <div
         role="tabpanel"
         id="scene-panel"

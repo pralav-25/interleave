@@ -1,5 +1,5 @@
 .product-site {
-  /* Dark glass surfaces over the Xcode-inspired black canvas and type scale. */
+  /* Apple-inspired material hierarchy, with a black content canvas. */
   display: flow-root;
   --background: #000;
   --surface: #15191f;
@@ -12,11 +12,6 @@
   --accent-hover: #096abd;
   --accent-soft: #242c38;
   --line: #ffffff26;
-  --glass-tint: #111720b8;
-  --glass-fallback: #151a22;
-  --glass-sheen: linear-gradient(135deg, #ffffff12, #ffffff03 45%, #98baff09);
-  --glass-shadow:
-    inset 0 1px 0 #ffffff24, inset 0 -1px 0 #ffffff06, 0 12px 40px #0006;
   --success: #23633c;
   --warning: #f0c674;
   --error: #ff9f9f;
@@ -79,38 +74,102 @@
 .product-site :is(section, [id]) {
   scroll-margin-top: 6rem;
 }
+/* Keep optical material on the control layer, and content on quiet black surfaces. */
 .product-site
   :is(
-    .product-nav-inner,
     .product-proof,
-    .showcase-tabs,
     .experiment-card,
     .workflow-grid article,
     .install-inner,
-    .faq-list details,
-    .install-help
+    .faq-list details
   ) {
-  background-color: var(--glass-fallback);
-  background-image: var(--glass-sheen);
-  border: 1px solid var(--line);
-  box-shadow: var(--glass-shadow);
+  background: #101114;
+  border: 1px solid #ffffff14;
+  box-shadow: none;
 }
-@supports (backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)) {
-  .product-site
-    :is(
-      .product-nav-inner,
-      .product-proof,
-      .showcase-tabs,
-      .experiment-card,
-      .workflow-grid article,
-      .install-inner,
-      .faq-list details,
-      .install-help
-    ) {
-    background-color: var(--glass-tint);
-    -webkit-backdrop-filter: blur(20px) saturate(135%);
-    backdrop-filter: blur(20px) saturate(135%);
+.product-site .liquid-glass {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  border: 1px solid transparent;
+  box-shadow:
+    0 12px 32px #0005,
+    0 2px 6px #0003;
+  --liquid-x: 35%;
+  --liquid-y: 0%;
+}
+.liquid-filter {
+  position: absolute;
+  pointer-events: none;
+  overflow: hidden;
+}
+.liquid-material {
+  position: absolute;
+  inset: -1px;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: inherit;
+  background: #202126;
+  box-shadow:
+    inset 0 1px 1px #ffffff70,
+    inset 1px 0 1px #ffffff24,
+    inset -1px 0 1px #ffffff28,
+    inset 0 -1px 1px #ffffff38,
+    inset 0 0 8px #ffffff12;
+}
+@supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
+  .liquid-material {
+    background:
+      linear-gradient(155deg, #ffffff20, #ffffff05 42%, #ffffff0a), #191b225e;
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    backdrop-filter: var(--liquid-filter, blur(16px) saturate(150%));
   }
+}
+.liquid-material::before,
+.liquid-material::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+/* A bright, curved rim defines thickness; the interior remains transparent. */
+.liquid-material::before {
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    #fff9,
+    #fff1 22%,
+    #fff0 45%,
+    #fff6 73%,
+    #fff1
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.liquid-material::after {
+  background: radial-gradient(
+    ellipse 240px 90px at var(--liquid-x) var(--liquid-y),
+    #ffffff23,
+    #ffffff00 75%
+  );
+  opacity: 0.55;
+  transition: opacity var(--motion-fast) ease;
+}
+.liquid-glass:has(:is(a, button):hover) > .liquid-material::after,
+.liquid-glass:focus-within > .liquid-material::after {
+  opacity: 1;
+}
+.liquid-glass:has(button:active) > .liquid-material::after {
+  opacity: 1;
+  background-color: #ffffff08;
 }
 .product-nav {
   position: sticky;
@@ -119,6 +178,15 @@
   width: calc(100% - 1.5rem);
   max-width: var(--content);
   margin: 0.75rem auto 0;
+}
+/* The scroll-edge scrim keeps labels clear as content travels behind the glass. */
+.product-nav::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  inset: -1rem -3rem -1.5rem;
+  background: linear-gradient(#0008 20%, #0000);
 }
 .product-nav-inner {
   max-width: var(--content);
@@ -146,7 +214,7 @@
   align-items: center;
   gap: var(--space-6);
   margin-left: auto;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 400;
   color: var(--ink);
 }
@@ -204,20 +272,17 @@
   border-color: #c6e2ff80;
 }
 .product-site .nav-cta {
-  padding: var(--space-2) var(--space-3);
-  background: linear-gradient(150deg, #ffffff16, #ffffff05);
-  border-color: #ffffff26;
-  box-shadow:
-    inset 0 1px 0 #ffffff2e,
-    0 3px 12px #0003;
+  padding: var(--space-2) var(--space-4);
+  background: #ffffff17;
+  border-color: transparent;
+  box-shadow: none;
   color: var(--ink) !important;
-  font-size: 0.75rem;
-  font-weight: 400;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 .product-site .nav-cta:hover {
   color: var(--ink) !important;
-  background-color: #ffffff0d;
-  border-color: #ffffff4d;
+  background-color: #ffffff29;
 }
 .product-secondary {
   border-color: var(--line);
@@ -248,7 +313,7 @@
   isolation: isolate;
   text-align: center;
   padding: 4.25rem var(--gutter) 0;
-  background: radial-gradient(ellipse at 50% 65%, #6689cb14, transparent 62%);
+  background: radial-gradient(ellipse at 50% 76%, #798ab521, transparent 58%);
 }
 .hero-glyphs {
   position: absolute;
@@ -424,13 +489,16 @@
   width: calc((100% - 12px) / 3);
   z-index: -1;
   border-radius: var(--radius-control);
-  border: 1px solid #ffffff30;
-  background: linear-gradient(145deg, #ffffff20, #ffffff08 75%);
+  border: 1px solid #ffffff28;
+  background: linear-gradient(160deg, #ffffff38, #ffffff14 65%);
   box-shadow:
     inset 0 1px 0 #ffffff45,
     0 3px 12px #0004;
   transform: translateX(calc(var(--active-tab) * 100%));
-  transition: transform var(--motion-standard) var(--ease-move);
+  transition: transform 420ms cubic-bezier(0.2, 1, 0.3, 1);
+}
+.showcase-tabs:has(button:active)::before {
+  transform: translateX(calc(var(--active-tab) * 100%)) scale(1.025, 0.94);
 }
 .showcase-tabs button {
   display: flex;
@@ -527,8 +595,8 @@
     transform var(--motion-fast) var(--ease-move);
 }
 .product-site .experiment-card:hover {
-  background-color: #222c3bbf;
-  border-color: #bfd7ff5e;
+  background-color: #181a20;
+  border-color: #ffffff30;
 }
 .experiment-number {
   font-size: 0.875rem;
@@ -644,8 +712,37 @@
 .product-site .install-control {
   position: relative;
 }
+.install-trigger-glass {
+  display: inline-flex;
+  border-radius: 1.75rem;
+  transition: transform var(--motion-fast) var(--ease-enter);
+}
+.product-site .install-trigger-glass > .product-primary {
+  background: transparent;
+  box-shadow: none;
+  border-color: transparent;
+  border-radius: inherit;
+  padding: var(--space-3) var(--space-8);
+  min-height: 54px;
+}
+.install-trigger-glass > .liquid-material {
+  background-color: #0865b4;
+}
+@supports (backdrop-filter: blur(16px)) or (-webkit-backdrop-filter: blur(16px)) {
+  .install-trigger-glass > .liquid-material {
+    background-color: #087beaa6;
+  }
+}
+.install-trigger-glass:has(button:active:not(:disabled)) {
+  transform: scale(0.97);
+}
+.product-site .install-trigger-glass:has(button:disabled) > .liquid-material {
+  background-color: var(--success);
+}
+.product-site .install-trigger-glass > button:active {
+  transform: none;
+}
 .product-site .install-help {
-  --glass-tint: #131820ed;
   position: absolute;
   z-index: 40;
   left: 50%;
@@ -658,10 +755,14 @@
   border-radius: var(--radius-card);
   font-size: 1rem;
   animation: help-enter var(--motion-standard) var(--ease-enter);
+  transform-origin: top center;
 }
 .product-site .install-help strong {
   font-size: 1.125rem;
   font-weight: 600;
+}
+.install-help > .liquid-material {
+  background-color: #191c25d9;
 }
 .product-site .install-help p {
   line-height: 1.6;
@@ -810,7 +911,7 @@
 @keyframes help-enter {
   from {
     opacity: 0;
-    transform: translate(-50%, 6px);
+    transform: translate(-50%, -6px) scale(0.92, 0.86);
   }
   to {
     opacity: 1;
@@ -933,30 +1034,40 @@
   }
   .product-site .nav-cta {
     padding-inline: var(--space-2);
+    font-size: 0.75rem;
+  }
+  .product-nav nav {
+    font-size: 0.75rem;
   }
   .showcase-tabs button {
     font-size: 0.8125rem;
   }
 }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
-  .product-site
-    :is(
-      .product-nav-inner,
-      .product-proof,
-      .showcase-tabs,
-      .experiment-card,
-      .workflow-grid article,
-      .install-inner,
-      .faq-list details,
-      .install-help
-    ) {
-    background: var(--glass-fallback);
+  .product-site .liquid-material,
+  .product-site .install-help > .liquid-material {
+    background: #202126;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    border-color: #6c7584;
+    border: 1px solid #85858d;
+    box-shadow: none;
+  }
+  .product-site .install-trigger-glass > .liquid-material {
+    background: #0865b4;
+  }
+  .liquid-material::before,
+  .liquid-material::after {
+    display: none;
+  }
+  .product-site .showcase-tabs::before {
+    background: #494a51;
+    border-color: #aaa;
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .product-site .install-trigger-glass:has(button:active) {
+    transform: none;
+  }
   .product-site *,
   .product-site *::before,
   .product-site *::after,
@@ -964,6 +1075,9 @@
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+  .product-site .showcase-tabs:has(button:active)::before {
+    transform: translateX(calc(var(--active-tab) * 100%));
   }
   .product-site .experiment-card:is(:hover, :active),
   .product-site

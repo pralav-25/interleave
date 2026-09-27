@@ -20,6 +20,7 @@ import { MacBookPreview } from '@/features/product/macbook-preview';
 import { ProductMotion } from '@/features/product/motion';
 import { AppLogo } from '@/features/product/app-logo';
 import { GlyphMatrix } from '@/components/ui/glyph-matrix';
+import { LiquidGlass } from '@/features/product/liquid-glass';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
 const experiments = [
@@ -41,7 +42,7 @@ export default function Home() {
       <LegacyReplay />
       <ProductMotion />
       <header className="product-nav">
-        <div className="product-nav-inner">
+        <LiquidGlass className="product-nav-inner">
           <Link href="/" className="product-brand" aria-label="Interleave home">
             <AppLogo size={24} />
             Interleave
@@ -63,7 +64,7 @@ export default function Home() {
           <Link href="/lab" className="nav-cta">
             Open lab <ArrowUpRight size={14} />
           </Link>
-        </div>
+        </LiquidGlass>
       </header>
       <main id="main">
         <section className="product-hero" id="overview">

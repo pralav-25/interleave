@@ -2,6 +2,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Download, Check, ArrowUpRight } from 'lucide-react';
+import { LiquidGlass } from './liquid-glass';
 
 type InstallPrompt = Event & {
   prompt: () => Promise<void>;
@@ -14,6 +15,7 @@ export function InstallButton({ className = '' }: { className?: string }) {
   const [help, setHelp] = useState(false);
   const helpId = useId();
   const trigger = useRef<HTMLButtonElement>(null);
+  const control = useRef<HTMLDivElement>(null);
   function dismissHelp() {
     setHelp(false);
     trigger.current?.focus();
@@ -24,7 +26,7 @@ export function InstallButton({ className = '' }: { className?: string }) {
       if (
         event.key === 'Escape' &&
         event.target instanceof Node &&
-        trigger.current?.parentElement?.contains(event.target)
+        control.current?.contains(event.target)
       ) {
         event.stopPropagation();
         setHelp(false);
@@ -71,22 +73,32 @@ export function InstallButton({ className = '' }: { className?: string }) {
       setPrompt(null);
     }
   }
+  const button = (
+    <button
+      ref={trigger}
+      className={className}
+      onClick={install}
+      disabled={installed}
+      aria-expanded={help}
+      aria-controls={help ? helpId : undefined}
+    >
+      {installed ? <Check size={16} /> : <Download size={16} />}
+      {installed ? 'Installed' : 'Install Interleave'}
+    </button>
+  );
   return (
-    <div className="install-control">
-      <button
-        ref={trigger}
-        className={className}
-        onClick={install}
-        disabled={installed}
-        aria-expanded={help}
-        aria-controls={help ? helpId : undefined}
-      >
-        {installed ? <Check size={16} /> : <Download size={16} />}
-        {installed ? 'Installed' : 'Install Interleave'}
-      </button>
+    <div className="install-control" ref={control}>
+      {className.includes('product-primary') ? (
+        <LiquidGlass className="install-trigger-glass" radius={28}>
+          {button}
+        </LiquidGlass>
+      ) : (
+        button
+      )}
       {help && (
-        <section
+        <LiquidGlass
           className="install-help"
+          as="section"
           id={helpId}
           aria-label="Installation instructions"
         >
@@ -106,7 +118,7 @@ export function InstallButton({ className = '' }: { className?: string }) {
           <button className="install-dismiss" onClick={dismissHelp}>
             Got it
           </button>
-        </section>
+        </LiquidGlass>
       )}
     </div>
   );
