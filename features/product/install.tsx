@@ -19,6 +19,22 @@ export function InstallButton({ className = '' }: { className?: string }) {
     trigger.current?.focus();
   }
   useEffect(() => {
+    if (!help) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (
+        event.key === 'Escape' &&
+        event.target instanceof Node &&
+        trigger.current?.parentElement?.contains(event.target)
+      ) {
+        event.stopPropagation();
+        setHelp(false);
+        trigger.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', closeOnEscape);
+    return () => document.removeEventListener('keydown', closeOnEscape);
+  }, [help]);
+  useEffect(() => {
     const media = window.matchMedia('(display-mode: standalone)');
     const sync = () => setInstalled(media.matches);
     const ready = (event: Event) => {
@@ -56,15 +72,7 @@ export function InstallButton({ className = '' }: { className?: string }) {
     }
   }
   return (
-    <div
-      className="install-control"
-      onKeyDown={(event) => {
-        if (event.key === 'Escape' && help) {
-          event.stopPropagation();
-          dismissHelp();
-        }
-      }}
-    >
+    <div className="install-control">
       <button
         ref={trigger}
         className={className}
@@ -77,10 +85,9 @@ export function InstallButton({ className = '' }: { className?: string }) {
         {installed ? 'Installed' : 'Install Interleave'}
       </button>
       {help && (
-        <div
+        <section
           className="install-help"
           id={helpId}
-          role="region"
           aria-label="Installation instructions"
         >
           <strong>A place on your desktop.</strong>
@@ -99,7 +106,7 @@ export function InstallButton({ className = '' }: { className?: string }) {
           <button className="install-dismiss" onClick={dismissHelp}>
             Got it
           </button>
-        </div>
+        </section>
       )}
     </div>
   );
