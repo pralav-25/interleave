@@ -16,6 +16,7 @@ import {
 import { InstallButton } from '@/features/product/install';
 import { LegacyReplay } from '@/features/product/legacy-replay';
 import { Showcase } from '@/features/product/showcase';
+import { ExperimentExplorer } from '@/features/product/experiment-explorer';
 import { MacBookPreview } from '@/features/product/macbook-preview';
 import { ProductMotion } from '@/features/product/motion';
 import { AppLogo } from '@/features/product/app-logo';
@@ -23,19 +24,6 @@ import { GlyphMatrix } from '@/components/ui/glyph-matrix';
 import { LiquidGlass } from '@/features/product/liquid-glass';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
-const experiments = [
-  ['01', 'Lost update', 'When two increments become one.', 'lost-update'],
-  [
-    '02',
-    'Oversold inventory',
-    'One seat. Two successful bookings.',
-    'oversold-inventory',
-  ],
-  ['03', 'Double payment', 'The retry that charges twice.', 'double-payment'],
-  ['04', 'Stale search', 'When an old response arrives last.', 'stale-search'],
-  ['05', 'Deadlock', 'Two workers. Neither can move.', 'deadlock'],
-  ['06', 'Write skew', 'Locally correct. Together, wrong.', 'write-skew'],
-];
 export default function Home() {
   return (
     <div className="product-site">
@@ -142,25 +130,7 @@ export default function Home() {
               assumptions.
             </p>
           </div>
-          <div className="experiment-grid">
-            {experiments.map(([number, title, description, id], index) => (
-              <Link
-                href={`/lab#v=1&lab=${id}&mode=buggy&trace=`}
-                className="experiment-card"
-                key={id}
-                data-reveal
-                data-reveal-delay={(index % 3) * 50}
-              >
-                <span className="experiment-number">{number}</span>
-                <ArrowUpRight className="experiment-arrow" size={21} />
-                <h3>{title}</h3>
-                <p>{description}</p>
-                <span className="experiment-open">
-                  Open experiment <ArrowRight size={15} />
-                </span>
-              </Link>
-            ))}
-          </div>
+          <ExperimentExplorer />
         </section>
         <section className="product-section workflow-section">
           <div className="section-heading" data-reveal>
