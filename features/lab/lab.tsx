@@ -13,6 +13,7 @@ const AssistantPanel = lazy(() =>
     default: m.AssistantPanel,
   })),
 );
+import { InstallButton } from '@/features/product/install';
 import { QuickGuide } from './quick-guide';
 import { SaveDialog } from '@/features/workspace/save-dialog';
 import {
@@ -37,6 +38,7 @@ import {
   Check,
   LockKeyhole,
   BookOpen,
+  Search,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -77,6 +79,7 @@ export default function Lab() {
   const [guideOpen, setGuideOpen] = useState(false);
   const [notice, setNotice] = useState('');
   const [fallbackUrl, setFallbackUrl] = useState('');
+  const [experimentQuery, setExperimentQuery] = useState('');
   const [scheduleFilter, setScheduleFilter] = useState('all');
   const experiment = experiments.find((e) => e.id === session.id)!;
   const program = useMemo(
@@ -260,13 +263,14 @@ export default function Lab() {
   }
   const failure = status === 'fail' || status === 'deadlock';
   return (
-    <>
+    <div className="lab-app">
       <header className="app-header">
         <Link href="/" className="brand" aria-label="Interleave home">
           <Workflow size={28} strokeWidth={1.8} />
-          interleave <small>Concurrency lab</small>
+          Interleave <small>Concurrency lab</small>
         </Link>
         <div className="header-links">
+          <InstallButton className="lab-install-button" />
           <Link href="/workspace" className="workspace-nav-link">
             <Bookmark size={15} />
             Workspace
@@ -292,22 +296,51 @@ export default function Lab() {
             Experiments{' '}
             <span>{String(experiments.length).padStart(2, '0')}</span>
           </p>
+          <label className="experiment-search">
+            <Search size={14} />
+            <input
+              aria-label="Search experiments"
+              placeholder="Find an experiment"
+              value={experimentQuery}
+              onChange={(event) => setExperimentQuery(event.target.value)}
+            />
+          </label>
           <SidebarContent className="scenario-list">
-            {experiments.map((e, i) => (
-              <button
-                className={`scenario-button ${e.id === session.id ? 'selected' : ''}`}
-                key={e.id}
-                onClick={() => select(e.id)}
-                aria-current={e.id === session.id ? 'true' : undefined}
-              >
-                <span className="number mono">0{i + 1}</span>
-                <span>
-                  <strong>{e.title}</strong>
-                  <small>{e.subtitle}</small>
-                </span>
-              </button>
-            ))}
+            {experiments
+              .filter((item) =>
+                `${item.title} ${item.subtitle} ${item.category}`
+                  .toLowerCase()
+                  .includes(experimentQuery.toLowerCase().trim()),
+              )
+              .map((e) => (
+                <button
+                  className={`scenario-button ${e.id === session.id ? 'selected' : ''}`}
+                  key={e.id}
+                  onClick={() => select(e.id)}
+                  aria-current={e.id === session.id ? 'true' : undefined}
+                >
+                  <span className="number mono">
+                    {String(experiments.indexOf(e) + 1).padStart(2, '0')}
+                  </span>
+                  <span>
+                    <strong>{e.title}</strong>
+                    <small>{e.subtitle}</small>
+                  </span>
+                </button>
+              ))}
           </SidebarContent>
+          {!experiments.some((item) =>
+            `${item.title} ${item.subtitle} ${item.category}`
+              .toLowerCase()
+              .includes(experimentQuery.toLowerCase().trim()),
+          ) && (
+            <p className="experiment-empty">
+              No experiments match.{' '}
+              <button onClick={() => setExperimentQuery('')}>
+                Clear search
+              </button>
+            </p>
+          )}
           <div className="nav-bottom">
             <Button
               variant="ghost"
@@ -348,6 +381,41 @@ export default function Lab() {
               <BookOpen size={17} /> <span>How to use</span>
             </Button>
           </section>
+          <div className="lab-overview" aria-label="Model exploration summary">
+            <div>
+              <span className="overview-label">SCHEDULES EXPLORED</span>
+              <strong>
+                {exploration.results.length}
+                <small>
+                  {exploration.complete
+                    ? 'Complete exploration'
+                    : 'Partial exploration'}
+                </small>
+              </strong>
+            </div>
+            <div>
+              <span className="overview-label">FAILURES FOUND</span>
+              <strong className={failures.length ? 'fail-color' : 'pass-color'}>
+                {failures.length}
+                <small>
+                  {failures.length
+                    ? 'Counterexamples to inspect'
+                    : 'No failures in this model'}
+                </small>
+              </strong>
+            </div>
+            <div>
+              <span className="overview-label">EXECUTION</span>
+              <strong>
+                {String(session.cursor).padStart(2, '0')}
+                <small>
+                  {session.mode === 'buggy'
+                    ? 'Original implementation'
+                    : 'Fixed implementation'}
+                </small>
+              </strong>
+            </div>
+          </div>
           <div className="lab-controls">
             <div className="implementation-control">
               <span className="control-label">Implementation</span>
@@ -927,6 +995,6 @@ export default function Lab() {
           title={`${experiment.title} · step ${session.cursor}`}
         />
       )}
-    </>
+    </div>
   );
 }

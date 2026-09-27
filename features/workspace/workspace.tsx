@@ -131,7 +131,7 @@ export function Workspace({ email }: { email: string }) {
           interleave <small>Workspace</small>
         </Link>
         <nav className="header-links">
-          <Link href="/">Lab</Link>
+          <Link href="/lab">Lab</Link>
           {/* oxlint-disable-next-line nextjs/no-html-link-for-pages -- Sites owns sign-out and requires a top-level navigation. */}
           <a href="/signout-with-chatgpt?return_to=/" target="_top">
             Sign out
@@ -146,7 +146,7 @@ export function Workspace({ email }: { email: string }) {
             <p>Saved traces and notes, private to your account.</p>
             <p className="account-email">{email}</p>
           </div>
-          <Link href="/" className="primary-link">
+          <Link href="/lab" className="primary-link">
             <Plus size={16} />
             New investigation
           </Link>
@@ -184,7 +184,7 @@ export function Workspace({ email }: { email: string }) {
               Open an experiment, find an interesting execution, and choose Save
               investigation.
             </p>
-            <Link href="/" className="product-link">
+            <Link href="/lab" className="product-link">
               Explore the lab →
             </Link>
           </section>
@@ -234,7 +234,7 @@ export function Workspace({ email }: { email: string }) {
                     <a
                       className="reopen-link"
                       href={
-                        '/#' +
+                        '/lab#' +
                         encodeReplay(
                           item.experimentId,
                           item.mode,

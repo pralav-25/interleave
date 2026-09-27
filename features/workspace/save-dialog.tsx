@@ -38,7 +38,7 @@ export function SaveDialog({
     if (!open) return;
     const controller = new AbortController();
     const returnTo =
-      '/#' + encodeReplay(context.id, context.mode, context.schedule);
+      '/lab#' + encodeReplay(context.id, context.mode, context.schedule);
     fetch('/api/session?returnTo=' + encodeURIComponent(returnTo), {
       signal: controller.signal,
     })

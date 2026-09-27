@@ -22,7 +22,7 @@ export default async function WorkspacePage({
           <Workflow size={28} />
           interleave
         </Link>
-        <Link href="/">Back to the lab</Link>
+        <Link href="/lab">Back to the lab</Link>
       </header>
       <main id="main" className="workspace-signin">
         {signin === 'expired' && (

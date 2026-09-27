@@ -51,6 +51,19 @@ await writeFile(
           headers: { 'Cache-Control': 'public, max-age=31536000, immutable' },
           continue: true,
         },
+        {
+          src: '/sw.js',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Service-Worker-Allowed': '/',
+          },
+          continue: true,
+        },
+        {
+          src: '/(screenshots|icons)/(.*)',
+          headers: { 'Cache-Control': 'public, max-age=3600, must-revalidate' },
+          continue: true,
+        },
         { handle: 'filesystem' },
         { src: '/(.*)', dest: '/render' },
       ],

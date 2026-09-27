@@ -71,3 +71,11 @@ The suite includes independently reasoned engine regressions and real SQLite exe
 Simulation and AI consume client resources; static assets can be cached independently of dynamic requests. The API is stateless and uses bounded indexed database operations. These choices support growth without requiring a server-side model per visitor, but there has been no load test and no throughput guarantee. D1 has finite database, request, and write-concurrency limits. Per-account storage caps do not rate-limit request frequency or account creation.
 
 Before a high-traffic launch, measure API latency and D1 read/write consumption under a representative workload, add hosting-level abuse/rate controls, and verify backup/restore operations. Before paid or team use, add organization membership and roles, audit history, explicit retention/export controls, operational alerts, and billing. Increasing the quota should include cursor pagination and a database sizing review. These capabilities are future work, not shipped features.
+
+## Product entry and local installation (0.4)
+
+The landing page and workbench have separate route modules. The product page loads small installation and showcase components; the deterministic workbench and the opt-in AI panel are loaded when used. Product media are real WebP captures with explicit dimensions, lazy loading below the hero, and no third-party image dependency.
+
+The installed PWA caches only public executable assets and the public lab shell. Cache versions follow the build's content hash, old public caches are retired on activation, and updates require an explicit reload. This reduces repeat public asset requests while preserving uncached authentication and workspace responses. Vercel serves generated chunks with immutable caching; product media use bounded caching and the service worker always revalidates. See [installation and offline behavior](INSTALL.md).
+
+This release improves distribution and repeat-visit cost. It does not establish a measured capacity target. The existing indexed owner-scoped queries, atomic per-owner quota and optimistic revisions remain the storage foundation. Hosting-level rate limiting, load testing and operational recovery drills remain release gates before a high-traffic or paid launch.
