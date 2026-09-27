@@ -18,6 +18,7 @@ import { InstallButton } from '@/features/product/install';
 import { LegacyReplay } from '@/features/product/legacy-replay';
 import { Showcase } from '@/features/product/showcase';
 import { MacBookPreview } from '@/features/product/macbook-preview';
+import { ProductMotion } from '@/features/product/motion';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
 const experiments = [
@@ -37,6 +38,7 @@ export default function Home() {
   return (
     <div className="product-site">
       <LegacyReplay />
+      <ProductMotion />
       <header className="product-nav">
         <div className="product-nav-inner">
           <Link href="/" className="product-brand" aria-label="Interleave home">
@@ -120,7 +122,7 @@ export default function Home() {
           </div>
         </section>
         <section className="product-section walkthrough" id="walkthrough">
-          <div className="section-heading">
+          <div className="section-heading" data-reveal>
             <p className="product-kicker">
               LESS GUESSWORK. MORE UNDERSTANDING.
             </p>
@@ -144,7 +146,7 @@ export default function Home() {
           className="product-section experiment-section"
           id="experiments"
         >
-          <div className="section-heading">
+          <div className="section-heading" data-reveal>
             <p className="product-kicker">SMALL MODELS. BIG REALIZATIONS.</p>
             <h2>
               Six ways for “it should work”
@@ -158,11 +160,13 @@ export default function Home() {
             </p>
           </div>
           <div className="experiment-grid">
-            {experiments.map(([number, title, description, id]) => (
+            {experiments.map(([number, title, description, id], index) => (
               <Link
                 href={`/lab#v=1&lab=${id}&mode=buggy&trace=`}
                 className="experiment-card"
                 key={id}
+                data-reveal
+                data-reveal-delay={(index % 3) * 50}
               >
                 <span className="experiment-number">{number}</span>
                 <ArrowUpRight className="experiment-arrow" size={21} />
@@ -176,7 +180,7 @@ export default function Home() {
           </div>
         </section>
         <section className="product-section workflow-section">
-          <div className="section-heading">
+          <div className="section-heading" data-reveal>
             <p className="product-kicker">FROM AHA TO EVIDENCE.</p>
             <h2>
               Keep the whole investigation
@@ -185,7 +189,7 @@ export default function Home() {
             </h2>
           </div>
           <div className="workflow-grid">
-            <article>
+            <article data-reveal>
               <GitBranch size={29} />
               <h3>Rewind. Branch. Replay.</h3>
               <p>
@@ -196,7 +200,7 @@ export default function Home() {
                 Start an investigation <ArrowRight size={16} />
               </Link>
             </article>
-            <article>
+            <article data-reveal data-reveal-delay="50">
               <Cpu size={29} />
               <h3>An assistant on your device.</h3>
               <p>
@@ -207,7 +211,7 @@ export default function Home() {
                 How local AI works <ArrowUpRight size={16} />
               </a>
             </article>
-            <article>
+            <article data-reveal data-reveal-delay="100">
               <Fingerprint size={29} />
               <h3>Your notes. Your workspace.</h3>
               <p>
@@ -221,7 +225,7 @@ export default function Home() {
           </div>
         </section>
         <section className="install-section" id="install">
-          <div className="install-inner">
+          <div className="install-inner" data-reveal>
             <div className="install-icon">
               <Workflow size={38} />
             </div>

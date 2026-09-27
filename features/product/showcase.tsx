@@ -1,6 +1,6 @@
 /* oxlint-disable nextjs/no-img-element -- Pre-optimized local WebP captures, with explicit dimensions and loading priority. */
 'use client';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { MacBookPreview } from './macbook-preview';
 import {
   ArrowUpRight,
@@ -49,6 +49,7 @@ export function Showcase() {
         className="showcase-tabs"
         role="tablist"
         aria-label="Product walkthrough"
+        style={{ '--active-tab': active } as CSSProperties}
       >
         {scenes.map((item, i) => (
           <button
@@ -87,6 +88,8 @@ export function Showcase() {
         id="scene-panel"
         aria-labelledby={`scene-${scene.id}`}
         tabIndex={0}
+        key={scene.id}
+        className="scene-panel"
       >
         <MacBookPreview src={scene.image} alt={scene.alt} />
         <div className="scene-caption">

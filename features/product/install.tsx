@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Download, Check, ArrowUpRight } from 'lucide-react';
 
@@ -12,6 +12,12 @@ export function InstallButton({ className = '' }: { className?: string }) {
   const [prompt, setPrompt] = useState<InstallPrompt | null>(null);
   const [installed, setInstalled] = useState(false);
   const [help, setHelp] = useState(false);
+  const helpId = useId();
+  const trigger = useRef<HTMLButtonElement>(null);
+  function dismissHelp() {
+    setHelp(false);
+    trigger.current?.focus();
+  }
   useEffect(() => {
     const media = window.matchMedia('(display-mode: standalone)');
     const sync = () => setInstalled(media.matches);
@@ -50,18 +56,33 @@ export function InstallButton({ className = '' }: { className?: string }) {
     }
   }
   return (
-    <div className="install-control">
+    <div
+      className="install-control"
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && help) {
+          event.stopPropagation();
+          dismissHelp();
+        }
+      }}
+    >
       <button
+        ref={trigger}
         className={className}
         onClick={install}
         disabled={installed}
         aria-expanded={help}
+        aria-controls={help ? helpId : undefined}
       >
         {installed ? <Check size={16} /> : <Download size={16} />}
         {installed ? 'Installed' : 'Install Interleave'}
       </button>
       {help && (
-        <div className="install-help">
+        <div
+          className="install-help"
+          id={helpId}
+          role="region"
+          aria-label="Installation instructions"
+        >
           <strong>A place on your desktop.</strong>
           <p>
             In Chrome or Edge, open the browser menu and choose{' '}
@@ -75,7 +96,7 @@ export function InstallButton({ className = '' }: { className?: string }) {
           <Link href="/lab">
             Open the lab first <ArrowUpRight size={14} />
           </Link>
-          <button className="install-dismiss" onClick={() => setHelp(false)}>
+          <button className="install-dismiss" onClick={dismissHelp}>
             Got it
           </button>
         </div>
