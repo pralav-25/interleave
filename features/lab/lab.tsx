@@ -14,6 +14,7 @@ const AssistantPanel = lazy(() =>
   })),
 );
 import { InstallButton } from '@/features/product/install';
+import { AppLogo } from '@/features/product/app-logo';
 import { QuickGuide } from './quick-guide';
 import { SaveDialog } from '@/features/workspace/save-dialog';
 import {
@@ -266,7 +267,7 @@ export default function Lab() {
     <div className="lab-app">
       <header className="app-header">
         <Link href="/" className="brand" aria-label="Interleave home">
-          <Workflow size={28} strokeWidth={1.8} />
+          <AppLogo />
           Interleave <small>Concurrency lab</small>
         </Link>
         <div className="header-links">

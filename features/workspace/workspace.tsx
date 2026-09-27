@@ -2,7 +2,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
-  Workflow,
   ArrowUpRight,
   Plus,
   Bookmark,
@@ -11,6 +10,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { AppLogo } from '@/features/product/app-logo';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import {
@@ -127,7 +127,7 @@ export function Workspace({ email }: { email: string }) {
     <>
       <header className="app-header">
         <Link href="/" className="brand">
-          <Workflow size={28} />
+          <AppLogo />
           interleave <small>Workspace</small>
         </Link>
         <nav className="header-links">

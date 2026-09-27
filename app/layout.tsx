@@ -6,7 +6,7 @@ const sans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const mono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
-  icons: { icon: '/favicon.svg', apple: '/icons/apple-touch-icon.png' },
+  icons: { icon: '/icons/icon-192.png', apple: '/icons/apple-touch-icon.png' },
   applicationName: 'Interleave',
   appleWebApp: {
     capable: true,

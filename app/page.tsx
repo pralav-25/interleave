@@ -18,6 +18,7 @@ import { LegacyReplay } from '@/features/product/legacy-replay';
 import { Showcase } from '@/features/product/showcase';
 import { MacBookPreview } from '@/features/product/macbook-preview';
 import { ProductMotion } from '@/features/product/motion';
+import { AppLogo } from '@/features/product/app-logo';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
 const experiments = [
@@ -41,6 +42,7 @@ export default function Home() {
       <header className="product-nav">
         <div className="product-nav-inner">
           <Link href="/" className="product-brand" aria-label="Interleave home">
+            <AppLogo size={24} />
             Interleave
           </Link>
           <nav aria-label="Product navigation">
@@ -64,9 +66,7 @@ export default function Home() {
       </header>
       <main id="main">
         <section className="product-hero" id="overview">
-          <div className="hero-icon" aria-hidden="true">
-            <Workflow size={45} strokeWidth={1.5} />
-          </div>
+          <AppLogo className="hero-icon" size={96} />
           <h1>Interleave</h1>
           <p className="hero-description">
             Interleave gives you the tools to understand concurrency. Control
@@ -192,9 +192,7 @@ export default function Home() {
         </section>
         <section className="install-section" id="install">
           <div className="install-inner" data-reveal>
-            <div className="install-icon">
-              <Workflow size={38} />
-            </div>
+            <AppLogo className="install-icon" size={96} />
             <p className="product-kicker">Install</p>
             <h2>
               A little lab.
@@ -303,7 +301,7 @@ export default function Home() {
       <footer className="product-footer">
         <div>
           <Link href="/" className="product-brand">
-            <Workflow size={21} />
+            <AppLogo size={24} />
             Interleave
           </Link>
           <p>Concurrency, made visible.</p>
