@@ -1,16 +1,17 @@
 .product-site {
-  --background: #fafafa;
-  --surface: #fff;
-  --surface-muted: #f0f2f5;
-  --ink: #1d232d;
-  --soft: #59616e;
-  --blue: #005ec5;
-  --accent-hover: #004fa8;
-  --accent-soft: #e8f0fb;
-  --line: #d8dde5;
-  --success: #276344;
-  --warning: #94620a;
-  --error: #bb3434;
+  --background: #090d14;
+  --surface: #1a2433;
+  --surface-muted: #111923;
+  --ink: #f2f5fa;
+  --soft: #a8b4c5;
+  --blue: #8bb9ff;
+  --accent-ink: #081424;
+  --accent-hover: #b0d0ff;
+  --accent-soft: #1c304b;
+  --line: #2b3646;
+  --success: #8fd8b0;
+  --warning: #f0c674;
+  --error: #ff9f9f;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -24,7 +25,7 @@
   --gutter: clamp(1rem, 4vw, 2rem);
   --radius-control: 0.5rem;
   --radius-card: 1rem;
-  --shadow-elevated: 0 12px 36px #152d4c18;
+  --shadow-elevated: 0 12px 36px #0006;
   --motion-fast: 140ms;
   --motion-standard: 220ms;
   --motion-entrance: 380ms;
@@ -34,7 +35,7 @@
   --ease-move: cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--background);
   color: var(--ink);
-  color-scheme: light;
+  color-scheme: dark;
   font-family:
     var(--font-geist-sans),
     -apple-system,
@@ -47,7 +48,7 @@
   overflow: clip;
 }
 .product-site :is(button, a, summary) {
-  -webkit-tap-highlight-color: #005ec51a;
+  -webkit-tap-highlight-color: #8bb9ff26;
 }
 .product-site a {
   transition: color var(--motion-fast) var(--ease-move);
@@ -81,7 +82,7 @@
 }
 @supports (backdrop-filter: blur(16px)) {
   .product-nav {
-    background: #fafafaed;
+    background: #090d14ed;
     backdrop-filter: blur(16px);
   }
 }
@@ -163,14 +164,14 @@
 .nav-cta,
 .product-primary {
   background: var(--blue);
-  color: #fff !important;
+  color: var(--accent-ink) !important;
 }
 .nav-cta:hover,
 .product-primary:hover:not(:disabled) {
   background: var(--accent-hover);
 }
 .product-secondary {
-  border-color: #b9c2d0;
+  border-color: #405069;
   background: var(--surface);
   color: var(--ink);
 }
@@ -188,7 +189,7 @@
   transform: scale(0.98);
 }
 .product-primary:disabled {
-  color: #fff;
+  color: var(--accent-ink);
   background: var(--success);
   cursor: default;
   transform: none;
@@ -207,7 +208,9 @@
   border-radius: 1rem;
   color: #bedaff;
   background: linear-gradient(145deg, #253c5c, #101622);
-  box-shadow: 0 12px 32px #2439551f;
+  box-shadow:
+    0 12px 32px #0003,
+    inset 0 1px 0 #b8d6ff1f;
 }
 .hero-eyebrow,
 .product-kicker {
@@ -271,8 +274,8 @@
   position: absolute;
   inset: 12% 2% 8%;
   background:
-    radial-gradient(ellipse at 25% 50%, #b6d4f85c, transparent 65%),
-    radial-gradient(ellipse at 80% 55%, #c5c3f64a, transparent 60%);
+    radial-gradient(ellipse at 25% 50%, #26498930, transparent 65%),
+    radial-gradient(ellipse at 80% 55%, #31356624, transparent 60%);
   pointer-events: none;
 }
 .macbook-preview {
@@ -287,7 +290,7 @@
   width: 100%;
   height: auto;
   position: relative;
-  filter: drop-shadow(0 22px 20px #15223924);
+  filter: drop-shadow(0 22px 20px #0008);
 }
 .macbook-display {
   position: absolute;
@@ -399,7 +402,9 @@
   z-index: -1;
   border-radius: var(--radius-control);
   background: var(--surface);
-  box-shadow: 0 2px 8px #172b4512;
+  box-shadow:
+    0 2px 8px #0004,
+    inset 0 0 0 1px var(--line);
   transform: translateX(calc(var(--active-tab) * 100%));
   transition: transform var(--motion-standard) var(--ease-move);
 }
@@ -425,7 +430,7 @@
   color: var(--blue);
 }
 .showcase-tabs button:active {
-  background: #005ec50d;
+  background: #8bb9ff14;
 }
 .showcase-tabs button[aria-selected='true'] {
   color: var(--blue);
@@ -501,7 +506,7 @@
 }
 .experiment-card:hover {
   background: var(--surface);
-  border-color: #84abd8;
+  border-color: #5279aa;
 }
 .experiment-number {
   font-size: 0.875rem;
@@ -561,7 +566,8 @@
   margin: 0 0 var(--space-4);
 }
 .install-section {
-  background: #eef3fa;
+  background: var(--surface-muted);
+  border-block: 1px solid var(--line);
   padding: var(--space-16) var(--gutter);
   text-align: center;
 }
@@ -660,7 +666,7 @@
     transform var(--motion-fast) var(--ease-move);
 }
 .product-site .install-dismiss:hover {
-  background: #d7e6fa;
+  background: #273d5d;
 }
 .faq-section {
   display: grid;
