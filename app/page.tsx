@@ -4,7 +4,6 @@ import {
   ArrowRight,
   ArrowUpRight,
   Workflow,
-  Code,
   Monitor,
   ShieldCheck,
   GitBranch,
@@ -21,7 +20,7 @@ import { MacBookPreview } from '@/features/product/macbook-preview';
 import { ProductMotion } from '@/features/product/motion';
 import { AppLogo } from '@/features/product/app-logo';
 import { GlyphMatrix } from '@/components/ui/glyph-matrix';
-import { LiquidGlass } from '@/features/product/liquid-glass';
+import { NavigationDock } from '@/features/product/navigation-dock';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
 export default function Home() {
@@ -29,31 +28,7 @@ export default function Home() {
     <div className="product-site">
       <LegacyReplay />
       <ProductMotion />
-      <header className="product-nav">
-        <LiquidGlass className="product-nav-inner">
-          <Link href="/" className="product-brand" aria-label="Interleave home">
-            <AppLogo size={24} />
-            Interleave
-          </Link>
-          <nav aria-label="Product navigation">
-            <a href="#overview">Overview</a>
-            <a href="#experiments">Experiments</a>
-            <a href="#install">Install</a>
-            <a
-              className="source-nav"
-              href={repository}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Code size={16} />
-              <span>Source</span>
-            </a>
-          </nav>
-          <Link href="/lab" className="nav-cta">
-            Open lab <ArrowUpRight size={14} />
-          </Link>
-        </LiquidGlass>
-      </header>
+      <NavigationDock />
       <main id="main">
         <section className="product-hero" id="overview">
           <div className="hero-glyphs" aria-hidden="true">
