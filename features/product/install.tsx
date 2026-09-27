@@ -99,6 +99,7 @@ export function InstallButton({ className = '' }: { className?: string }) {
         <LiquidGlass
           className="install-help"
           as="section"
+          enabled={className.includes('product-primary')}
           id={helpId}
           aria-label="Installation instructions"
         >

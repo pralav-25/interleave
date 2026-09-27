@@ -15,10 +15,12 @@ export function LiquidGlass({
   children,
   className = '',
   radius = 32,
+  enabled = true,
   ...props
 }: HTMLAttributes<HTMLDivElement> & {
   radius?: number;
   as?: 'div' | 'section';
+  enabled?: boolean;
 }) {
   const id = `liquid-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
   const root = useRef<HTMLDivElement>(null);
@@ -26,7 +28,7 @@ export function LiquidGlass({
 
   useEffect(() => {
     const element = root.current;
-    if (!element) return;
+    if (!element || !enabled) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     const opaque = window.matchMedia(
       '(prefers-reduced-transparency: reduce), (prefers-contrast: more)',
@@ -131,7 +133,14 @@ export function LiquidGlass({
       reduced.removeEventListener('change', preferencesChanged);
       opaque.removeEventListener('change', preferencesChanged);
     };
-  }, [radius]);
+  }, [radius, enabled]);
+
+  if (!enabled)
+    return (
+      <Tag className={className} {...props}>
+        {children}
+      </Tag>
+    );
 
   return (
     <Tag ref={root} className={`liquid-glass ${className}`} {...props}>
