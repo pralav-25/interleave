@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import Link from 'next/link';
-import { Code2, Download, FlaskConical, PanelsTopLeft } from 'lucide-react';
+import { ArrowUpRight, Code2, House } from 'lucide-react';
 import { AppLogo } from './app-logo';
 import { LiquidGlass } from './liquid-glass';
 
@@ -12,6 +12,7 @@ type Section = (typeof sections)[number];
 export function NavigationDock() {
   const [active, setActive] = useState<Section>('overview');
   const animation = useRef(0);
+  const header = useRef<HTMLElement>(null);
 
   useEffect(() => {
     let tracking = 0;
@@ -85,10 +86,12 @@ export function NavigationDock() {
     cancelAnimationFrame(animation.current);
     animation.current = 0;
     const from = window.scrollY;
+    const clearance =
+      (header.current?.getBoundingClientRect().bottom ?? 72) + 20;
     const top = Math.max(
       0,
       Math.min(
-        from + target.getBoundingClientRect().top - 24,
+        from + target.getBoundingClientRect().top - clearance,
         document.documentElement.scrollHeight - window.innerHeight,
       ),
     );
@@ -127,8 +130,17 @@ export function NavigationDock() {
   }
 
   return (
-    <header className="dock-position">
-      <LiquidGlass className="navigation-dock" radius={26}>
+    <header className="dock-position" ref={header}>
+      <LiquidGlass className="navigation-dock" radius={40}>
+        <a
+          href="#overview"
+          className="dock-brand"
+          aria-label="Interleave home"
+          onClick={(event) => navigate(event, 'overview')}
+        >
+          <AppLogo size={30} />
+          <span>Interleave</span>
+        </a>
         <nav className="dock-items" aria-label="Product navigation">
           <a
             href="#overview"
@@ -137,10 +149,8 @@ export function NavigationDock() {
             aria-current={active === 'overview' ? 'location' : undefined}
             onClick={(event) => navigate(event, 'overview')}
           >
-            <span className="dock-icon dock-home">
-              <AppLogo size={32} />
-            </span>
-            <span className="dock-label" aria-hidden="true">
+            <House className="dock-home-icon" size={20} aria-hidden="true" />
+            <span className="dock-label dock-overview-label" aria-hidden="true">
               Overview
             </span>
           </a>
@@ -151,9 +161,6 @@ export function NavigationDock() {
             aria-current={active === 'experiments' ? 'location' : undefined}
             onClick={(event) => navigate(event, 'experiments')}
           >
-            <span className="dock-icon">
-              <FlaskConical size={25} strokeWidth={1.6} />
-            </span>
             <span className="dock-label" aria-hidden="true">
               Experiments
             </span>
@@ -165,24 +172,18 @@ export function NavigationDock() {
             aria-current={active === 'install' ? 'location' : undefined}
             onClick={(event) => navigate(event, 'install')}
           >
-            <span className="dock-icon">
-              <Download size={25} strokeWidth={1.6} />
-            </span>
             <span className="dock-label" aria-hidden="true">
               Install
             </span>
           </a>
-          <span className="dock-divider" aria-hidden="true" />
           <a
             href="https://github.com/pralav-25/interleave"
-            className="dock-link"
+            className="dock-link dock-source"
             aria-label="Source on GitHub (opens in a new tab)"
             target="_blank"
             rel="noreferrer"
           >
-            <span className="dock-icon">
-              <Code2 size={25} strokeWidth={1.6} />
-            </span>
+            <Code2 size={19} strokeWidth={1.7} aria-hidden="true" />
             <span className="dock-label" aria-hidden="true">
               Source
             </span>
@@ -192,12 +193,10 @@ export function NavigationDock() {
             className="dock-link dock-lab"
             aria-label="Open lab"
           >
-            <span className="dock-icon">
-              <PanelsTopLeft size={25} strokeWidth={1.6} />
-            </span>
             <span className="dock-label" aria-hidden="true">
-              Open lab
+              <span className="dock-lab-prefix">Open </span>lab
             </span>
+            <ArrowUpRight size={17} strokeWidth={1.7} aria-hidden="true" />
           </Link>
         </nav>
       </LiquidGlass>
