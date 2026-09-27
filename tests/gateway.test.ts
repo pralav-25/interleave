@@ -208,8 +208,23 @@ void test('sign-out revokes the server session before clearing cookies', async (
   assert.equal(denied.status, 403);
 });
 void test('proxy preserves RSC streams, blocks external redirects, and hides auth exchange routes', async () => {
+  const navigationHeaders = {
+    RSC: '1',
+    'Next-Router-State-Tree': '%5B%22%22%2C%7B%7D%5D',
+    'Next-Router-Prefetch': '1',
+    'Next-Router-Segment-Prefetch': '/__PAGE__',
+    'Next-Url': '/lab',
+    'X-Nextjs-Deployment-Id': 'release-test',
+    'X-Vinext-Mounted-Slots': 'root',
+    'X-Vinext-Interception-Context': '/lab',
+    'X-Vinext-Rsc-Render-Mode': 'prefetch',
+    'X-Vinext-Client-Reuse-Manifest': '{}',
+  };
   const handle = createGateway(config, async (_input, init) => {
-    assert.equal(new Headers(init?.headers).get('rsc'), '1');
+    const forwarded = new Headers(init?.headers);
+    for (const [name, value] of Object.entries(navigationHeaders)) {
+      assert.equal(forwarded.get(name), value, `${name} must reach the renderer`);
+    }
     return new Response('RSC stream', {
       headers: {
         'Content-Type': 'text/x-component',
@@ -219,7 +234,7 @@ void test('proxy preserves RSC streams, blocks external redirects, and hides aut
     });
   });
   const result = await handle(
-    new Request('https://app.test/workspace', { headers: { RSC: '1' } }),
+    new Request('https://app.test/workspace', { headers: navigationHeaders }),
   );
   assert.equal(await result.text(), 'RSC stream');
   assert.equal(result.headers.get('content-type'), 'text/x-component');

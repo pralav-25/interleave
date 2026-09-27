@@ -239,9 +239,15 @@ export function createGateway(
         'rsc',
         'next-router-state-tree',
         'next-router-prefetch',
+        'next-router-segment-prefetch',
         'next-url',
+        'x-nextjs-deployment-id',
         'x-vinext-rsc',
         'x-vinext-prefetch',
+        'x-vinext-mounted-slots',
+        'x-vinext-interception-context',
+        'x-vinext-rsc-render-mode',
+        'x-vinext-client-reuse-manifest',
       ]) {
         const value = request.headers.get(name);
         if (value) headers.set(name, value);
