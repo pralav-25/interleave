@@ -12,7 +12,6 @@ import {
   Cpu,
   Code2,
   BookOpen,
-  Download,
 } from 'lucide-react';
 import { InstallButton } from '@/features/product/install';
 import { LegacyReplay } from '@/features/product/legacy-replay';
@@ -42,9 +41,6 @@ export default function Home() {
       <header className="product-nav">
         <div className="product-nav-inner">
           <Link href="/" className="product-brand" aria-label="Interleave home">
-            <span className="brand-symbol">
-              <Workflow size={20} />
-            </span>
             Interleave
           </Link>
           <nav aria-label="Product navigation">
@@ -71,31 +67,15 @@ export default function Home() {
           <div className="hero-icon" aria-hidden="true">
             <Workflow size={45} strokeWidth={1.5} />
           </div>
-          <p className="hero-eyebrow">THE CONCURRENCY WORKBENCH</p>
-          <h1>
-            Concurrency.
-            <br />
-            <span>In plain sight.</span>
-          </h1>
+          <h1>Interleave</h1>
           <p className="hero-description">
-            Make the race happen. See why it breaks.
-            <br className="desktop-break" /> Test the fix, one interleaving at a
-            time.
-          </p>
-          <div className="hero-actions">
-            <Link href="/lab" className="product-primary">
-              Open the lab <ArrowRight size={18} />
-            </Link>
-            <a href="#install" className="product-secondary">
-              <Download size={17} />
-              Install the app
-            </a>
-          </div>
-          <p className="hero-note">
-            Free & open source <i /> No account needed for the lab
+            Interleave gives you the tools to understand concurrency. Control
+            the scheduler, reproduce race conditions, and test a fix against
+            every possible order in a finite model. Explore six interactive
+            experiments, with a local AI assistant and a workspace for your
+            investigations.
           </p>
           <div className="hero-product">
-            <div className="hero-product-glow" />
             <MacBookPreview
               src="/screenshots/lost-update-macos.webp"
               alt="Interleave on a MacBook, showing a completed lost-update execution in the installed macOS app."
@@ -123,14 +103,8 @@ export default function Home() {
         </section>
         <section className="product-section walkthrough" id="walkthrough">
           <div className="section-heading" data-reveal>
-            <p className="product-kicker">
-              LESS GUESSWORK. MORE UNDERSTANDING.
-            </p>
-            <h2>
-              The bug doesn’t hide
-              <br />
-              when you run the scheduler.
-            </h2>
+            <p className="product-kicker">Explore</p>
+            <h2>Find the bug. Understand the fix.</h2>
             <p>
               Control two workers. Inspect every change. Then try a fix and put
               it through every possible order in the model.
@@ -147,12 +121,8 @@ export default function Home() {
           id="experiments"
         >
           <div className="section-heading" data-reveal>
-            <p className="product-kicker">SMALL MODELS. BIG REALIZATIONS.</p>
-            <h2>
-              Six ways for “it should work”
-              <br />
-              to go wrong.
-            </h2>
+            <p className="product-kicker">Experiments</p>
+            <h2>Six ways for “it should work” to go wrong.</h2>
             <p>
               Familiar bugs, reduced to the moments that matter. Every
               experiment includes a broken implementation, a fix, and explicit
@@ -181,12 +151,8 @@ export default function Home() {
         </section>
         <section className="product-section workflow-section">
           <div className="section-heading" data-reveal>
-            <p className="product-kicker">FROM AHA TO EVIDENCE.</p>
-            <h2>
-              Keep the whole investigation
-              <br />
-              in one place.
-            </h2>
+            <p className="product-kicker">Investigate</p>
+            <h2>Keep the whole investigation in one place.</h2>
           </div>
           <div className="workflow-grid">
             <article data-reveal>
@@ -229,7 +195,7 @@ export default function Home() {
             <div className="install-icon">
               <Workflow size={38} />
             </div>
-            <p className="product-kicker">READY WHEN CURIOSITY STRIKES.</p>
+            <p className="product-kicker">Install</p>
             <h2>
               A little lab.
               <br />A place on your desktop.
@@ -273,7 +239,7 @@ export default function Home() {
         </section>
         <section className="product-section faq-section">
           <div>
-            <p className="product-kicker">A FEW GOOD QUESTIONS.</p>
+            <p className="product-kicker">Questions</p>
             <h2>
               Before you
               <br />
