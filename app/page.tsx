@@ -20,6 +20,7 @@ import { AppLogo } from '@/features/product/app-logo';
 import { GlyphMatrix } from '@/components/ui/glyph-matrix';
 import { NavigationDock } from '@/features/product/navigation-dock';
 import { WorkflowStories } from '@/features/product/workflow-stories';
+import LiquidMetal from '@/components/ui/liquid-metal';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
 export default function Home() {
@@ -50,7 +51,14 @@ export default function Home() {
               Concurrency.
             </span>
             <span data-reveal="hero" data-reveal-delay="120">
-              Made visible.
+              <LiquidMetal
+                maskText
+                variant="chrome"
+                speed={0.65}
+                pointerInfluence={false}
+              >
+                Made visible.
+              </LiquidMetal>
             </span>
           </h1>
           <p
@@ -170,10 +178,17 @@ export default function Home() {
             </p>
           </div>
           <figure className="installed-preview">
-            <MacBookPreview
-              src="/screenshots/mac-app.webp"
-              alt="Interleave installed on a MacBook, showing the lost-update experiment after both workers complete."
-            />
+            <LiquidMetal
+              className="install-metal-stage"
+              variant="mercury"
+              distortion={1.1}
+              speed={0.3}
+            >
+              <MacBookPreview
+                src="/screenshots/mac-app.webp"
+                alt="Interleave installed on a MacBook, showing the lost-update experiment after both workers complete."
+              />
+            </LiquidMetal>
             <figcaption>
               Interleave on macOS. A real execution in the installed app.
             </figcaption>

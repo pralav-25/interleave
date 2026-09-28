@@ -15,6 +15,8 @@ Preserve the existing glass response, navigation scrolling, experiment interacti
 | Hero description and actions | Follow the headline | 620ms, 180/240ms delays |
 | MacBook stage | Rise 28px and settle from scale 0.985 | 700ms, once on entry |
 | Feature illustrations | Same restrained media reveal, independent of the adjacent copy | 700ms, once on entry |
+| Chrome hero text | Slow CSS highlight sweep, then hold the current position | 4.2 seconds of active time |
+| Install metal surface | Supplied WebGL liquid flow, then freeze | 4.2 seconds of active time; at most 30 draws/second |
 | Section introductions and features | Fade and rise 20px | 460ms; related items stagger by 70ms |
 | Screenshot selector | Existing sliding glass selection | 420ms |
 | Screenshot and experiment panels | Brief state-change reveal | 220ms |
@@ -33,6 +35,8 @@ Use transforms and opacity. Content remains visible before hydration and if Java
 The existing glyph texture runs for at most 3.6 seconds of active time, pauses offscreen or in a hidden tab, and then settles. Liquid Glass pointer highlights update at most once per animation frame. Do not add another animation engine or idle rendering loop.
 
 The replay schedules, assistant flow, and example investigation are static illustrations. Their labels remain readable without motion. Alternate their desktop positions through CSS grid; preserve the reading order on narrow screens.
+
+Liquid Metal starts when it enters the viewport and pauses while offscreen or in a hidden tab. Its `paused` prop freezes the effect; its duration is capped at 4.5 seconds. The shader is created lazily and uses at most 180,000 pixels with a 768-pixel maximum dimension. Measure size on resize, not on each frame. Cancel animation frames, observers, event listeners, timers, and GPU resources during cleanup. Reduced motion, reduced transparency, increased contrast, and forced colors disable the animated material. The static CSS surface remains available without WebGL.
 
 ## Navigation and accessibility
 

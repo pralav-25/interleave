@@ -1553,6 +1553,26 @@
   color: var(--soft);
   margin-top: var(--space-4);
 }
+.product-site .install-metal-stage {
+  padding: 1.5rem 0;
+  border: 1px solid #d9e6f41f;
+  border-radius: 2rem;
+  background: #090b0f;
+}
+.product-site .install-metal-stage > .liquid-metal-surface {
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse at center, #000 10%, #0005 90%);
+}
+.install-metal-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 1px 0 #ffffff14,
+    inset 0 -24px 64px #0006;
+}
 @keyframes panel-enter {
   from {
     opacity: 0;

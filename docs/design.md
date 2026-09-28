@@ -42,6 +42,12 @@ Reference: [Google Antigravity](https://antigravity.google/), observed on Septem
 
 Glass belongs to the control layer. Keep the content readable on quiet surfaces. Do not apply refraction to text or stack full glass materials. Preserve the current opaque accessibility fallback.
 
+## Liquid metal accents
+
+Use the supplied Liquid Metal component in `components/ui/liquid-metal.tsx`. Its chrome text finish highlights “Made visible.”; its mercury surface sits at low opacity behind the install section's real MacBook capture. Preserve the black canvas, existing glass controls, and alternating feature layout. The four supplied palettes remain available for reuse, but chrome and mercury are the product defaults.
+
+The material is decorative. Keep headings as real selectable text and the canvas out of the accessibility tree. The chrome text palette has brighter shadow stops for readability on black. Reduced motion uses a still finish; increased contrast and forced colors use plain text. Missing WebGL or a lost context falls back to a CSS surface. No extra animation dependency is required.
+
 ## Preserve the useful parts
 
 - Floating navigation dock, current-section indication, cancellable section scrolling, and keyboard focus management.

@@ -1,0 +1,66 @@
+.liquid-metal {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+.liquid-metal-surface {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.liquid-metal-surface canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+.liquid-metal-surface .metal-canvas-ready {
+  opacity: 1;
+}
+.liquid-metal-content {
+  position: relative;
+  z-index: 1;
+}
+.liquid-metal-text {
+  display: inline-block;
+  color: #dbe4ee;
+}
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .liquid-metal-text {
+    background-image: var(--metal-text);
+    background-size: 300% 100%;
+    background-position: 50% 50%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: metal-text-sweep var(--metal-sweep-time, 9s) linear infinite;
+  }
+}
+@keyframes metal-text-sweep {
+  from {
+    background-position: 30% 50%;
+  }
+  to {
+    background-position: 100% 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce),
+  (prefers-contrast: more),
+  (prefers-reduced-transparency: reduce) {
+  .liquid-metal-text {
+    animation: none;
+  }
+}
+@media (prefers-contrast: more), (forced-colors: active) {
+  .liquid-metal-text {
+    background: none;
+    color: inherit;
+    -webkit-text-fill-color: currentColor;
+    animation: none;
+  }
+  .liquid-metal-surface {
+    display: none;
+  }
+}
