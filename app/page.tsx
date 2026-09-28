@@ -42,16 +42,37 @@ export default function Home() {
               duration={3600}
             />
           </div>
-          <AppLogo className="hero-icon" size={96} />
-          <h1>Interleave</h1>
-          <p className="hero-description">
-            Interleave gives you the tools to understand concurrency. Control
-            the scheduler, reproduce race conditions, and test a fix against
-            every possible order in a finite model. Explore six interactive
-            experiments, with a local AI assistant and a workspace for your
-            investigations.
+          <div className="hero-wordmark" data-reveal="hero">
+            <AppLogo className="hero-icon" size={48} />
+            <span>Interleave</span>
+          </div>
+          <h1>
+            <span data-reveal="hero" data-reveal-delay="60">
+              Concurrency.
+            </span>
+            <span data-reveal="hero" data-reveal-delay="120">
+              Made visible.
+            </span>
+          </h1>
+          <p
+            className="hero-description"
+            data-reveal="hero"
+            data-reveal-delay="180"
+          >
+            Find the race. Replay every step. Understand why a fix works, with
+            six interactive experiments and every schedule in a finite model.
           </p>
-          <div className="hero-product">
+          <div
+            className="hero-actions"
+            data-reveal="hero"
+            data-reveal-delay="240"
+          >
+            <InstallButton className="product-primary" />
+            <Link href="/lab" className="product-secondary">
+              Open the lab <ArrowUpRight size={18} />
+            </Link>
+          </div>
+          <div className="hero-product" data-reveal="media">
             <MacBookPreview
               src="/screenshots/lost-update-macos.webp"
               alt="Interleave on a MacBook, showing a completed lost-update execution in the installed macOS app."
@@ -78,7 +99,7 @@ export default function Home() {
           </div>
         </section>
         <section className="product-section walkthrough" id="walkthrough">
-          <div className="section-heading" data-reveal>
+          <div className="section-heading section-heading-split" data-reveal>
             <p className="product-kicker">Explore</p>
             <h2>Find the bug. Understand the fix.</h2>
             <p>
@@ -96,7 +117,7 @@ export default function Home() {
           className="product-section experiment-section"
           id="experiments"
         >
-          <div className="section-heading" data-reveal>
+          <div className="section-heading section-heading-split" data-reveal>
             <p className="product-kicker">Experiments</p>
             <h2>Six ways for “it should work” to go wrong.</h2>
             <p>
@@ -108,7 +129,7 @@ export default function Home() {
           <ExperimentExplorer />
         </section>
         <section className="product-section workflow-section">
-          <div className="section-heading" data-reveal>
+          <div className="section-heading section-heading-wide" data-reveal>
             <p className="product-kicker">Investigate</p>
             <h2>Keep the whole investigation in one place.</h2>
           </div>
@@ -124,7 +145,7 @@ export default function Home() {
                 Start an investigation <ArrowRight size={16} />
               </Link>
             </article>
-            <article data-reveal data-reveal-delay="50">
+            <article data-reveal data-reveal-delay="70">
               <Cpu size={29} />
               <h3>An assistant on your device.</h3>
               <p>
@@ -135,7 +156,7 @@ export default function Home() {
                 How local AI works <ArrowUpRight size={16} />
               </a>
             </article>
-            <article data-reveal data-reveal-delay="100">
+            <article data-reveal data-reveal-delay="140">
               <Fingerprint size={29} />
               <h3>Your notes. Your workspace.</h3>
               <p>

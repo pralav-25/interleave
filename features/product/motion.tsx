@@ -24,14 +24,21 @@ export function ProductMotion() {
           seen.add(entry.target);
           const delay =
             Number(entry.target.getAttribute('data-reveal-delay')) || 0;
+          const kind = entry.target.getAttribute('data-reveal');
+          const isMedia = kind === 'media';
           const animation = entry.target.animate(
             [
-              { opacity: 0, transform: 'translateY(16px)' },
-              { opacity: 1, transform: 'translateY(0)' },
+              {
+                opacity: 0,
+                transform: isMedia
+                  ? 'translateY(28px) scale(0.985)'
+                  : 'translateY(20px)',
+              },
+              { opacity: 1, transform: 'translateY(0) scale(1)' },
             ],
             {
-              duration,
-              delay: Math.min(delay, 150),
+              duration: isMedia ? 700 : kind === 'hero' ? 620 : duration,
+              delay: Math.min(delay, 240),
               easing,
               fill: 'backwards',
             },

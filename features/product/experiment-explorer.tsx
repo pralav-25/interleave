@@ -178,9 +178,8 @@ export function ExperimentExplorer() {
           </div>
           <h3>{item.title}</h3>
           <p className="experiment-description">{item.description}</p>
-          <div
+          <figure
             className="experiment-trace"
-            role="group"
             aria-label={`Illustrated failure: ${item.title}`}
           >
             <div className="trace-heading">
@@ -211,7 +210,7 @@ export function ExperimentExplorer() {
               <strong>{item.outcome}</strong>
               <span>{item.expected}</span>
             </div>
-          </div>
+          </figure>
           <p className="experiment-why">{item.why}</p>
           <div className="experiment-detail-footer">
             <p>
