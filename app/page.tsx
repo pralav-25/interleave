@@ -7,8 +7,6 @@ import {
   Monitor,
   ShieldCheck,
   GitBranch,
-  Fingerprint,
-  Cpu,
   Code2,
   BookOpen,
 } from 'lucide-react';
@@ -21,6 +19,7 @@ import { ProductMotion } from '@/features/product/motion';
 import { AppLogo } from '@/features/product/app-logo';
 import { GlyphMatrix } from '@/components/ui/glyph-matrix';
 import { NavigationDock } from '@/features/product/navigation-dock';
+import { WorkflowStories } from '@/features/product/workflow-stories';
 import './product.css';
 const repository = 'https://github.com/pralav-25/interleave';
 export default function Home() {
@@ -133,45 +132,11 @@ export default function Home() {
             <p className="product-kicker">Investigate</p>
             <h2>Keep the whole investigation in one place.</h2>
           </div>
-          <div className="workflow-grid">
-            <article data-reveal>
-              <GitBranch size={29} />
-              <h3>Rewind. Branch. Replay.</h3>
-              <p>
-                Go back to any step and change the order. Share a link that
-                reproduces the exact execution, or export a Markdown report.
-              </p>
-              <Link href="/lab">
-                Start an investigation <ArrowRight size={16} />
-              </Link>
-            </article>
-            <article data-reveal data-reveal-delay="70">
-              <Cpu size={29} />
-              <h3>An assistant on your device.</h3>
-              <p>
-                Enable the optional local AI tutor to discuss your trace. WebGPU
-                required; the first model download is approximately 1 GB.
-              </p>
-              <a href={`${repository}/blob/main/docs/AI.md`}>
-                How local AI works <ArrowUpRight size={16} />
-              </a>
-            </article>
-            <article data-reveal data-reveal-delay="140">
-              <Fingerprint size={29} />
-              <h3>Your notes. Your workspace.</h3>
-              <p>
-                Sign in to save private investigations and pick up where you
-                left off. The public lab is always available without an account.
-              </p>
-              <Link href="/workspace">
-                Open your workspace <ArrowRight size={16} />
-              </Link>
-            </article>
-          </div>
+          <WorkflowStories />
         </section>
         <section className="install-section" id="install">
           <div className="install-inner" data-reveal>
-            <AppLogo className="install-icon" size={96} />
+            <AppLogo className="install-icon" size={64} />
             <p className="product-kicker">Install</p>
             <h2>
               A little lab.

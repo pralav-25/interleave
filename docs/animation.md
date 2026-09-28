@@ -14,6 +14,7 @@ Preserve the existing glass response, navigation scrolling, experiment interacti
 | Headline lines | Fade and rise individually | 620ms, 60/120ms delays |
 | Hero description and actions | Follow the headline | 620ms, 180/240ms delays |
 | MacBook stage | Rise 28px and settle from scale 0.985 | 700ms, once on entry |
+| Feature illustrations | Same restrained media reveal, independent of the adjacent copy | 700ms, once on entry |
 | Section introductions and features | Fade and rise 20px | 460ms; related items stagger by 70ms |
 | Screenshot selector | Existing sliding glass selection | 420ms |
 | Screenshot and experiment panels | Brief state-change reveal | 220ms |
@@ -30,6 +31,8 @@ Entrance easing: `cubic-bezier(0.16, 1, 0.3, 1)`. Keep interaction feedback imme
 Use transforms and opacity. Content remains visible before hydration and if JavaScript fails. Do not pre-hide the page in CSS. Disconnect observers and cancel outstanding animations when the component unmounts.
 
 The existing glyph texture runs for at most 3.6 seconds of active time, pauses offscreen or in a hidden tab, and then settles. Liquid Glass pointer highlights update at most once per animation frame. Do not add another animation engine or idle rendering loop.
+
+The replay schedules, assistant flow, and example investigation are static illustrations. Their labels remain readable without motion. Alternate their desktop positions through CSS grid; preserve the reading order on narrow screens.
 
 ## Navigation and accessibility
 

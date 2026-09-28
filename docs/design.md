@@ -24,6 +24,8 @@ Reference: [Google Antigravity](https://antigravity.google/), observed on Septem
 - Body: 17–20px, with comfortable 1.5–1.6 line height. Regular control labels remain readable at 14px or larger.
 - Section labels: 14px with a restrained change in tracking; no all-caps marketing badges.
 - Desktop section introductions pair a large title with a shorter explanatory paragraph. Stack them on phones.
+- Use the width of the page for paired visual and text sections. The walkthrough places its MacBook on the left and its explanation on the right. Investigation stories alternate text/visual, visual/text, then text/visual. The install section finishes with the MacBook on the left and the install actions on the right.
+- Give each feature a useful illustration: alternate worker schedules, the local AI context flow, and an example investigation. Label illustrations as examples and keep real product screenshots in their MacBook frames. Do not present illustrative content as a live saved result or generated AI answer.
 - Use `4–7.5rem` between major sections. Do not stretch interactive controls merely to fill space.
 
 ## Color and surfaces
@@ -50,6 +52,6 @@ Glass belongs to the control layer. Keep the content readable on quiet surfaces.
 
 ## Responsive behavior
 
-On small screens, retain the compact navigation dock, stack the hero actions where needed, and allow the headline to scale down. Keep the four capability labels in a readable two-column strip. Preserve the experiment index's existing mobile layout. No horizontal page overflow or cropped control labels at 320px.
+On small screens, retain the compact navigation dock, stack the hero actions where needed, and allow the headline to scale down. Below 960px, stack the paired feature layouts in their document order, with the copy before each illustration. Keep the four capability labels in a readable two-column strip. Preserve the experiment index's existing mobile layout. No horizontal page overflow or cropped control labels at 320px.
 
 Use the motion rules in `animation.md`. Validate the install popover from both entry points, screenshot tabs, experiment selection, keyboard navigation, and reduced-motion behavior before publishing.
