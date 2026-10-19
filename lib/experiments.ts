@@ -11,17 +11,20 @@ const both = (steps: Operation[]): [Operation[], Operation[]] => [steps, steps];
 const n = (v: unknown) => Number(v);
 const lock = (key: string): Operation => ({
   code: `lock(${key})`,
-  enabled: (f, a) => f.locks[key] == null || f.locks[key] === a,
+  enabled: (f) => f.locks[key] == null,
   run: (f, a) => {
     f.locks[key] = a;
     return `Acquired ${key}.`;
   },
 });
-const unlock = (key: string): Operation =>
-  op(`unlock(${key})`, (f) => {
+const unlock = (key: string): Operation => ({
+  code: `unlock(${key})`,
+  enabled: (f, a) => f.locks[key] === a,
+  run: (f) => {
     f.locks[key] = null;
     return `Released ${key}.`;
-  });
+  },
+});
 const name = (a: Actor) => (a === 0 ? 'A' : 'B');
 export const experiments: Experiment[] = [
   {
