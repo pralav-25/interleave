@@ -88,6 +88,16 @@ void test('exploration budget is reported as partial, never exhaustive', () => {
   assert.equal(r.complete, false);
   assert.equal(r.visited, 3);
 });
+void test('invalid exploration budgets cannot bypass the search limit', () => {
+  const program = experiments[0].make('buggy');
+  for (const budget of [NaN, Infinity, -Infinity, -1, 1.5, Number.MAX_SAFE_INTEGER + 1])
+    assert.throws(() => explore(program, budget), /budget/);
+  assert.deepEqual(explore(program, 0), {
+    results: [], complete: false, visited: 0,
+  });
+  const complete = explore(program);
+  assert.equal(explore(program, complete.visited).complete, true);
+});
 void test('round-trip every scenario and mode through URL fragments', () => {
   for (const e of experiments)
     for (const mode of ['buggy', 'fixed'] as const) {
