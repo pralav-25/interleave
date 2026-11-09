@@ -105,6 +105,8 @@ export function explore(
   program: Program,
   maxNodes = 50000,
 ): { results: ScheduleResult[]; complete: boolean; visited: number } {
+  if (!Number.isSafeInteger(maxNodes) || maxNodes < 0)
+    throw new Error('Exploration budget must be a nonnegative safe integer.');
   const results: ScheduleResult[] = [];
   let visited = 0;
   let complete = true;
