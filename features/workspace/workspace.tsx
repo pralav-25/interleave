@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowUpRight,
@@ -45,7 +45,13 @@ export function Workspace({ email }: { email: string }) {
   const [deleting, setDeleting] = useState<Investigation | null>(null);
   const [busy, setBusy] = useState(false);
   const [editError, setEditError] = useState('');
+  const refreshVersion = useRef(0);
+  const invalidateRefresh = useCallback(() => {
+    refreshVersion.current++;
+  }, []);
   const refresh = useCallback((signal?: AbortSignal) => {
+    const version = ++refreshVersion.current;
+    const isCurrent = () => version === refreshVersion.current && !signal?.aborted;
     return fetch('/api/investigations', { signal })
       .then(async (r) => {
         const data = (await r.json()) as {
@@ -57,13 +63,13 @@ export function Workspace({ email }: { email: string }) {
         return data.investigations;
       })
       .then((rows) => {
-        if (!signal?.aborted) {
+        if (isCurrent()) {
           setItems(rows);
           setError('');
         }
       })
       .catch((error: unknown) => {
-        if (!signal?.aborted)
+        if (isCurrent())
           setError(
             error instanceof Error
               ? error.message
@@ -71,14 +77,17 @@ export function Workspace({ email }: { email: string }) {
           );
       })
       .finally(() => {
-        if (!signal?.aborted) setLoading(false);
+        if (isCurrent()) setLoading(false);
       });
   }, []);
   useEffect(() => {
     const controller = new AbortController();
     void refresh(controller.signal);
-    return () => controller.abort();
-  }, [refresh]);
+    return () => {
+      controller.abort();
+      invalidateRefresh();
+    };
+  }, [refresh, invalidateRefresh]);
   async function update() {
     if (!editing) return;
     setBusy(true);
