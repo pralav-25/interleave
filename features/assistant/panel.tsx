@@ -31,7 +31,7 @@ import {
   type ChatMessage,
   type TraceContext,
 } from './context';
-type Phase = 'idle' | 'loading' | 'ready' | 'error';
+type Phase = 'idle' | 'loading' | 'ready' | 'removing' | 'error';
 export function AssistantPanel({
   open,
   onOpenChange,
@@ -148,8 +148,8 @@ export function AssistantPanel({
     request.current++;
     setBusy(false);
     const operation = ++modelRequest.current;
-    setPhase('loading');
-    setLoadText('Removing cached model files…');
+    setPhase('removing');
+    setError('');
     try {
       await provider.current?.clearCache();
       if (operation !== modelRequest.current) return;
@@ -218,7 +218,11 @@ export function AssistantPanel({
                 and needs WebGPU with about 2 GB of available GPU memory.
                 Questions and answers are not sent to an AI server.
               </p>
-              {phase === 'loading' ? (
+              {phase === 'removing' ? (
+                <output className="load-detail">
+                  Removing cached model files…
+                </output>
+              ) : phase === 'loading' ? (
                 <>
                   <Progress
                     value={progress}
